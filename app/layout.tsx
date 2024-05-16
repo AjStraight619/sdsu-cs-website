@@ -16,7 +16,7 @@ const fontSans = FontSans({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning className="!scroll-smooth">
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            <div className="pointer-events-none absolute inset-x-0 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div className="pointer-events-none absolute inset-x-0 transform-gpu overflow-hidden blur-3xl sm:-top-80 -z-10">
               <div
                 style={{
                   clipPath:
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               ></div>
             </div>
             <Topnav />
-            {children}
+            <main>{children}</main>
           </ThemeProvider>
         </body>
       </html>
