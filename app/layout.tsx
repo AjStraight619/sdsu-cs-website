@@ -5,7 +5,8 @@ import { ReactNode } from "react";
 
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
-import Topnav from "@/components/landing-page/topnav";
+// import Topnav from "@/components/landing-page/topnav";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,5 +35,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </body>
       </html>
     </>
+  );
+}
+
+function Topnav() {
+  return (
+    <nav className="top-0 h-16 w-full  border-b border-muted-foreground fixed">
+      <div className="flex items-center justify-between px-4 h-full">
+        <div></div>
+        <ModeToggle />
+      </div>
+    </nav>
   );
 }
