@@ -23,6 +23,8 @@ type SidebarLink = {
   hash: string;
 };
 
+// framer-motion variants for sidebar items
+
 const menuAnimation = {
   hidden: {
     opacity: 0,
@@ -39,6 +41,7 @@ const menuAnimation = {
     },
   },
 };
+
 const menuItemAnimation = {
   hidden: (idx: number) => ({
     padding: 0,
@@ -75,6 +78,8 @@ const showAnimation = {
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
+
+  // ? Probably just going to use hashes with the sidebar to navigate to certain sections on the page? And then use top nav for page routing?
 
   const handleRouteChange = (route: string) => {
     router.replace(`${pathname}/${route}`);
@@ -115,7 +120,7 @@ type SidebarDropdownItemProps = {
   handleRouteChange: (route: string) => void;
 };
 
-// Sidebar dropdown menu item
+// Sidebar Dropdown component that wraps sidebar items
 
 function SidebarDropdownItem({
   label,
