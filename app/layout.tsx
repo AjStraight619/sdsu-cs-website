@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            <div className="pointer-events-none absolute inset-x-0 transform-gpu overflow-hidden blur-3xl sm:-top-80 -z-10">
+            {/* <div className="pointer-events-none absolute inset-x-0 transform-gpu overflow-hidden blur-3xl sm:-top-80 -z-10">
               <div
                 style={{
                   clipPath:
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 }}
                 className="relative left-[calc(50%)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-red-400 to-red-200 opacity-50 dark:opacity-10 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
               ></div>
-            </div>
+            </div> */}
             <Topnav />
             <main>{children}</main>
           </ThemeProvider>
@@ -52,7 +52,7 @@ function Topnav() {
     <nav className="top-0 h-16 w-full  border-b border-muted-foreground fixed bg-background">
       <div className="flex items-center justify-between px-4 h-full">
         <div></div>
-        <ModeToggle />
+        {/* <ModeToggle /> */}
       </div>
     </nav>
   );

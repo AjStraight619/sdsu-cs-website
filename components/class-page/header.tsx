@@ -5,5 +5,9 @@ type HeaderProps = {
 };
 
 export default function Header({ children }: HeaderProps) {
-  return <h1 className="text-3xl font-semibold text-center">{children}</h1>;
+  return (
+    <h1 className="text-3xl font-semibold text-center capitalize">
+      {children}
+    </h1>
+  );
 }

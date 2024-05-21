@@ -14,9 +14,9 @@ export default async function ClassPage({ params: { slug } }: ClassPageProps) {
   // ? Fetch data based on params
 
   return (
-    <div className="h-screen flex flex-col items-center pt-24">
-      <Header>Class: {classCode.split("-").join(" ")}</Header>
-      {otherRoutes.length > 0 && <p>Other routes {otherRoutes.join("/")}</p>}
+    <div>
+      {/* <Header>Class: {classCode.split("-").join(" ")}</Header>
+      {otherRoutes.length > 0 && <p>Other routes {otherRoutes.join("/")}</p>} */}
     </div>
   );
 }
