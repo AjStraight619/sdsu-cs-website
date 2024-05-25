@@ -11,11 +11,11 @@ import {
 } from "../ui/select";
 import Link from "next/link";
 
-type SubTopNavProps = {
-  classCode: string;
+type HeaderProps = {
+  course: string;
 };
 
-export default function SubTopNav({ classCode }: SubTopNavProps) {
+export default function Header({ course }: HeaderProps) {
   return (
     <div className="container flex flex-row items-center justify-between mb-8">
       <h1>

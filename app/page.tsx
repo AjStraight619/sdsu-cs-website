@@ -1,9 +1,12 @@
+import Courses from "@/components/landing-page/courses";
+import Header from "@/components/landing-page/header";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button>Yo</Button>
-    </main>
+    <div className="flex min-h-screen flex-col items-center justify-between p-24 gap-y-8">
+      <Header />
+      {/* <Courses /> */}
+    </div>
   );
 }

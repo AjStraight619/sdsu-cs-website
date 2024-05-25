@@ -52,39 +52,30 @@ const menuItemAnimation = {
   }),
 };
 
-const showAnimation = {
-  hidden: {
-    width: 0,
-    opacity: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  show: {
-    opacity: 1,
-    width: "auto",
-    transition: {
-      duration: 0.5,
-    },
-  },
-};
+// const showAnimation = {
+//   hidden: {
+//     width: 0,
+//     opacity: 0,
+//     transition: {
+//       duration: 0.5,
+//     },
+//   },
+//   show: {
+//     opacity: 1,
+//     width: "auto",
+//     transition: {
+//       duration: 0.5,
+//     },
+//   },
+// };
 
 type SidebarProps = {
-  otherRoutes: string[];
-  classCode: string;
+  profName: string;
+  course: string;
 };
 
-export default function Sidebar({ otherRoutes, classCode }: SidebarProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
+export default function Sidebar({ course, profName }: SidebarProps) {
   // ? Probably just going to use hashes with the sidebar to navigate to certain sections on the page? And then use top nav for page routing?
-
-  const handleRouteChange = (route: string) => {
-    const params = new URLSearchParams(searchParams);
-    router.replace(`/class/${classCode}${route}`, {});
-  };
 
   return (
     // <nav className="fixed left-0 w-40 top-16 border-r border-muted-foreground h-full bg-background">
@@ -95,19 +86,20 @@ export default function Sidebar({ otherRoutes, classCode }: SidebarProps) {
             <SidebarDropdownItem
               subLinks={item.subLinks}
               label={item.label}
-              handleRouteChange={() => handleRouteChange(item.route ?? "")}
               hash={item.hash}
               icon={item.icon}
-              classCode={classCode}
+              course={course}
+              profName={profName}
             />
           ) : (
             <SidebarItem
+              profName={profName}
               hasRoute={item.hasRoute}
               route={item.route}
               label={item.label}
-              handleRouteChange={() => handleRouteChange(item.route ?? "")}
               hash={item.hash}
               icon={item.icon}
+              course={course}
             />
           )}
         </div>
@@ -120,9 +112,9 @@ type SidebarDropdownItemProps = {
   label: string;
   subLinks: SidebarSubLink[];
   hash?: string;
-  handleRouteChange: (route: string) => void;
+  profName: string;
   icon: ReactElement;
-  classCode: string;
+  course: string;
 };
 
 // Sidebar Dropdown component that wraps sidebar items
@@ -130,14 +122,13 @@ type SidebarDropdownItemProps = {
 function SidebarDropdownItem({
   label,
   subLinks,
-  handleRouteChange,
   hash,
   icon,
-  classCode,
+  profName,
+  course,
 }: SidebarDropdownItemProps) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
-  // const activeSection = useActiveSection();
 
   return (
     <div className="w-full flex flex-col">
@@ -177,7 +168,10 @@ function SidebarDropdownItem({
                   variant="link"
                   className="text-muted-foreground dark:hover:text-gray-50 transition-colors hover:text-black"
                 >
-                  <Link href={`/class/${classCode}/module/${subLink.hash}`}>
+                  <Link
+                    className="w-full"
+                    href={`/class/${profName}/${course}/module/${subLink.hash}`}
+                  >
                     {subLink.label}
                   </Link>
                 </Button>
@@ -191,10 +185,11 @@ function SidebarDropdownItem({
 }
 
 export type SidebarItemProps = {
+  profName: string;
   hasRoute: boolean;
   route: string | undefined;
   label: string;
-  handleRouteChange: (route: string) => void;
+  course: string;
   hash?: string;
   icon: ReactElement;
 };
@@ -202,28 +197,28 @@ export type SidebarItemProps = {
 // Single Side bar item
 
 function SidebarItem({
+  profName,
   hasRoute,
   route,
   label,
-  handleRouteChange,
   hash,
   icon,
+  course,
 }: SidebarItemProps) {
   return (
-    <motion.li
-      layout
-      variants={showAnimation}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-    >
-      <SidebarButton
-        onClick={() => handleRouteChange(route ?? "")}
-        className="flex items-center justify-start gap-x-2 w-full"
+    <motion.li>
+      <Button
+        variant="link"
+        className="flex items-center justify-start text-black"
       >
-        <span>{icon}</span>
-        <span>{label}</span>
-      </SidebarButton>
+        <Link
+          className="w-full flex items-center gap-x-2"
+          href={`/class/${profName}/${course}/${route}`}
+        >
+          <span>{icon}</span>
+          <span>{label}</span>
+        </Link>
+      </Button>
     </motion.li>
   );
 }
