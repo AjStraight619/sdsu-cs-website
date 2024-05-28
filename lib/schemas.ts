@@ -22,3 +22,18 @@ export const LoginSchema = z.object({
     message: "Password is required",
   }),
 });
+
+export const FileSchema = z.custom<File>(
+  (file) => {
+    if (!(file instanceof File)) {
+      return false;
+    }
+
+    // 5MB
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    return file.size <= MAX_FILE_SIZE;
+  },
+  {
+    message: "File size should be less than 5MB",
+  }
+);

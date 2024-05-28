@@ -1,5 +1,5 @@
 import Courses from "@/components/landing-page/courses";
-import Header from "@/components/landing-page/header";
+import Header from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {

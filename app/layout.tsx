@@ -2,6 +2,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Inter as FontSans, Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const fontSans = FontSans({
   subsets: ["latin"],
