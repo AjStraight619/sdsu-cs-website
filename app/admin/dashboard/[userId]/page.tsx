@@ -44,7 +44,7 @@ export default async function AdminDashboard({
           {/* You can uncomment Modules and DragnDrop components when needed */}
           <Modules />
         </section>
-        {/* <DragnDrop /> */}
+        <DragnDrop />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 "use client";
-import { useEditing } from "@/hooks/useEditing";
+
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
 import EditButton from "../ui/edit-button";
 import { PencilIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { useEditing } from "@/hooks/useEditing";
 
 export default function Syllabus() {
   const { isEditing, toggleEditing } = useEditing();

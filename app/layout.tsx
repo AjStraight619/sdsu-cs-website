@@ -2,7 +2,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Inter as FontSans, Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           )}
         >
           <main>{children}</main>
+          <Toaster />
         </body>
       </html>
     </>
