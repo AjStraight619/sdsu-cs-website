@@ -1,6 +1,6 @@
-import ActiveSection from "@/components/class-page/active-section";
-import Header from "@/components/class-page/layout-header";
-import Sidebar from "@/components/class-page/sidebar";
+import ActiveSection from "@/components/professor-page/active-section";
+import Header from "@/components/professor-page/layout-header";
+import Sidebar from "@/components/professor-page/sidebar";
 // import SubTopNav from "@/components/class-page/sub-top-nav";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent } from "@/components/ui/select";
