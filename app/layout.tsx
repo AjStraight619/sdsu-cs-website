@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { Inter as FontSans, Inter, Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/common/navbar";
+import Navbar from "@/components/navigation/navbar";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
