@@ -22,7 +22,7 @@ interface INavLink {
 function NavLink({ href, text }: INavLink) {
 	return (
 		<Link
-			className="font-medium font-sans text-charcoal-950 text-base"
+			className="font-medium font-sans text-charcoal-950 text-base hover:text-charcoal-800 hover:underline"
 			href={href}
 		>
 			{text}
