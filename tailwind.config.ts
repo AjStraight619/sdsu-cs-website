@@ -19,6 +19,25 @@ const config = {
         "2xl": "1400px",
       },
     },
+    colors: {
+      "dark-red": "#A6192E",
+      "bright-red": "#D41736",
+      "dark-teal": "#008080",
+      "bright-teal": "#00A39D",
+      "charcoal": {
+        50: "#F7F7F7",
+        100: "#F0EFEF",
+        200: "#E2DEDE",
+        300: "#CFC9C9",
+        400: "#AFA6A6",
+        500: "#918484",
+        600: "#776A6A",
+        700: "#685C5C",
+        800: "#514848",
+        900: "#433B3B",
+        950: "#2D2828",
+      }
+    },
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
