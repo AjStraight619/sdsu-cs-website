@@ -24,6 +24,7 @@ const config = {
       "bright-red": "#D41736",
       "dark-teal": "#008080",
       "bright-teal": "#00A39D",
+      "white": "#FFFFFF",
       "charcoal": {
         50: "#F7F7F7",
         100: "#F0EFEF",

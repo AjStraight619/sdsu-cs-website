@@ -22,6 +22,66 @@ export default function ClassPage() {
 					professorName="Professor Name"
 					sectionNumbers={[]}
 				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[1, 3, 5]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[2]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[1, 3, 5]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[2]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[1, 3, 5]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[2]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[1, 3, 5]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[2]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[1, 3, 5]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[2]}
+				/>
+				<ProfessorCard
+					professorName="Professor Name"
+					sectionNumbers={[]}
+				/>
 			</CardsLayout>
 		</div>
 	);
