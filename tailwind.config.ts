@@ -42,6 +42,7 @@ const config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        inter: ["var(--font-inter)", ...fontFamily.sans],
         poppins: ["var(--font-poppins)", ...fontFamily.sans],
       },
       colors: {

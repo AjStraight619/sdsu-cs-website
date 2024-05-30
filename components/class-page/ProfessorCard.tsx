@@ -15,7 +15,7 @@ export default function ProfessorCard({
 				src="/base_profile_picture.jpg"
 				alt="A profile picture that is grayed out, indicating an empty profile picture."
 			/>
-			<div className="font-sans flex flex-col">
+			<div className="font-inter flex flex-col">
 				<span className="text-charcoal-950 font-bold text-2xl">
 					{professorName}
 				</span>
