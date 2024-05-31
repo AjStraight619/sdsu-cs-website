@@ -1,17 +1,10 @@
 "use client";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { useCourse } from "@/hooks/useCourse";
 import { ReactNode } from "react";
 
-type ActiveSectionProps = {
-  profName: string;
-  course: string;
-};
-
-export default function ActiveSection({
-  profName,
-  course,
-}: ActiveSectionProps) {
-  const activeSection = useActiveSection();
+export default function ActiveSection() {
+  const course = useCourse();
 
   const renderSubHeader = (classCode: string) => {
     const parts = classCode.split("-");
@@ -22,7 +15,7 @@ export default function ActiveSection({
 
   return (
     <div className="flex flex-col gap-y-2 select-none justify-start items-start w-full">
-      <ActiveSectionHeader>{activeSection}</ActiveSectionHeader>
+      <ActiveSectionHeader>{course}</ActiveSectionHeader>
       <ActiveSectionSubHeader>
         {renderSubHeader(course.toUpperCase())}
       </ActiveSectionSubHeader>

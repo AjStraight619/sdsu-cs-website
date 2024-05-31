@@ -11,11 +11,7 @@ import {
 } from "../ui/select";
 import Link from "next/link";
 
-type HeaderProps = {
-  course: string;
-};
-
-export default function Header({ course }: HeaderProps) {
+export default function Header() {
   return (
     <div className="container flex flex-row items-center justify-between mb-8">
       <h1>

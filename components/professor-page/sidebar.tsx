@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -71,10 +70,9 @@ const menuItemAnimation = {
 
 type SidebarProps = {
   profName: string;
-  course: string;
 };
 
-export default function Sidebar({ course, profName }: SidebarProps) {
+export default function Sidebar({ profName }: SidebarProps) {
   // ? Probably just going to use hashes with the sidebar to navigate to certain sections on the page? And then use top nav for page routing?
 
   return (
@@ -88,7 +86,7 @@ export default function Sidebar({ course, profName }: SidebarProps) {
               label={item.label}
               hash={item.hash}
               icon={item.icon}
-              course={course}
+              // course={course}
               profName={profName}
             />
           ) : (
@@ -99,7 +97,7 @@ export default function Sidebar({ course, profName }: SidebarProps) {
               label={item.label}
               hash={item.hash}
               icon={item.icon}
-              course={course}
+              // course={course}
             />
           )}
         </div>
@@ -114,7 +112,6 @@ type SidebarDropdownItemProps = {
   hash?: string;
   profName: string;
   icon: ReactElement;
-  course: string;
 };
 
 // Sidebar Dropdown component that wraps sidebar items
@@ -125,7 +122,6 @@ function SidebarDropdownItem({
   hash,
   icon,
   profName,
-  course,
 }: SidebarDropdownItemProps) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
@@ -170,7 +166,7 @@ function SidebarDropdownItem({
                 >
                   <Link
                     className="w-full"
-                    href={`/class/${profName}/${course}/module/${subLink.hash}`}
+                    href={`/class/${profName}/module/${subLink.hash}`}
                   >
                     {subLink.label}
                   </Link>
@@ -189,7 +185,6 @@ export type SidebarItemProps = {
   hasRoute: boolean;
   route: string | undefined;
   label: string;
-  course: string;
   hash?: string;
   icon: ReactElement;
 };
@@ -203,8 +198,8 @@ function SidebarItem({
   label,
   hash,
   icon,
-  course,
-}: SidebarItemProps) {
+}: // course,
+SidebarItemProps) {
   return (
     <motion.li>
       <Button
@@ -213,7 +208,7 @@ function SidebarItem({
       >
         <Link
           className="w-full flex items-center gap-x-2"
-          href={`/class/${profName}/${course}/${route}`}
+          href={`/class/${profName}/${route}`}
         >
           <span>{icon}</span>
           <span>{label}</span>
