@@ -29,7 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					)}
 				>
 					<Navbar />
-					<main className="mt-32 mx-6 mb-6">{children}</main>
+					<main className="mt-32 mx-6 mb-6 lg:mx-32 xl:mx-48 2xl:mx-60">
+						{children}
+					</main>
 					{/* <Toaster /> */}
 				</body>
 			</html>

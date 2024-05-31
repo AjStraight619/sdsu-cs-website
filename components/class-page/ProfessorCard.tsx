@@ -1,3 +1,5 @@
+import Heading3 from "../common/Heading3";
+
 interface IProfessorCard {
 	professorName: string;
 	sectionNumbers: number[];
@@ -16,9 +18,7 @@ export default function ProfessorCard({
 				alt="A profile picture that is grayed out, indicating an empty profile picture."
 			/>
 			<div className="font-inter flex flex-col">
-				<span className="text-charcoal-950 font-bold text-2xl">
-					{professorName}
-				</span>
+				<Heading3>{professorName}</Heading3>
 				<span className="uppercase text-charcoal-600 font-bold text-lg">
 					{createSectionNumbersText(sectionNumbers)}
 				</span>
