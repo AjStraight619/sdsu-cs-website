@@ -1,12 +1,12 @@
-import ClassPageLayout from "@/components/class-page/ClassPageLayout";
+import MainContentLayout from "@/components/class-page/MainContentLayout";
 
 export default function ClassHome() {
 	return (
-		<ClassPageLayout
+		<MainContentLayout
 			headingMainText="Home"
 			headingSubText="Course Name - Professor Name"
 		>
 			<>{/* Markdown content here */}</>
-		</ClassPageLayout>
+		</MainContentLayout>
 	);
 }

@@ -24,7 +24,7 @@ export default function MobileClassNav() {
 			<button className="w-full flex justify-center items-center">
 				<Folder
 					className={`${
-						isActive("modules")
+						isActive("module")
 							? "stroke-bright-red"
 							: "stroke-charcoal-600"
 					}`}

@@ -1,10 +1,10 @@
-import ClassPageLayout from "@/components/class-page/ClassPageLayout";
+import MainContentLayout from "@/components/class-page/MainContentLayout";
 import Heading3 from "@/components/common/Heading3";
 import { ReactNode } from "react";
 
 export default function ModulePage() {
 	return (
-		<ClassPageLayout headingMainText="Module Name Here">
+		<MainContentLayout headingMainText="Module Name Here">
 			<ContentSectionWrapper headingText="About the module">
 				<>{/* Markdown Info here from each module */}</>
 			</ContentSectionWrapper>
@@ -14,7 +14,7 @@ export default function ModulePage() {
 			<ContentSectionWrapper headingText="Videos">
 				<>{/* Lecture video mp4s go here */}</>
 			</ContentSectionWrapper>
-		</ClassPageLayout>
+		</MainContentLayout>
 	);
 }
 

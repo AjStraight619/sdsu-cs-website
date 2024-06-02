@@ -2,17 +2,17 @@ import { ReactNode } from "react";
 import Heading1 from "../common/Heading1";
 import SubHeading from "../common/SubHeading";
 
-interface IClassPageLayout {
+interface IMainContentLayout {
 	children: ReactNode;
 	headingMainText: string;
 	headingSubText?: string | undefined;
 }
 
-export default function ClassPageLayout({
+export default function MainContentLayout({
 	children,
 	headingMainText,
 	headingSubText,
-}: IClassPageLayout) {
+}: IMainContentLayout) {
 	return (
 		<div className="flex flex-col gap-12">
 			<div className="flex flex-col gap-2">

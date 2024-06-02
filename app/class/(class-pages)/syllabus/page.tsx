@@ -1,9 +1,9 @@
-import ClassPageLayout from "@/components/class-page/ClassPageLayout";
+import MainContentLayout from "@/components/class-page/MainContentLayout";
 
 export default function SyllabusPage() {
 	return (
-		<ClassPageLayout headingMainText="Syllabus">
+		<MainContentLayout headingMainText="Syllabus">
 			<>{/* Syllabus PDF goes here */}</>
-		</ClassPageLayout>
+		</MainContentLayout>
 	);
 }
