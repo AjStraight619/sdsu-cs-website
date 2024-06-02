@@ -1,4 +1,4 @@
-import MobileClassNav from "@/components/navigation/MobileClassNav";
+import MobileClassNav from "@/components/class-page/MobileClassNav";
 import SideNav from "@/components/class-page/SideNav";
 import { ReactNode } from "react";
 
