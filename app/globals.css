@@ -59,3 +59,45 @@
       @apply bg-background text-foreground;
     }
   }
+
+
+  .markdown {
+    @apply font-sans leading-relaxed;
+  }
+  
+  .markdown h1 {
+    @apply text-4xl font-bold mt-8 mb-4;
+  }
+  
+  .markdown h2 {
+    @apply text-3xl font-semibold mt-6 mb-3;
+  }
+  
+  .markdown h3 {
+    @apply text-2xl font-medium mt-5 mb-2;
+  }
+  
+  .markdown p {
+    @apply mb-2;
+  }
+  
+  .markdown a {
+    @apply text-bright-red underline;
+  }
+  
+  .markdown ul,
+  .markdown ol {
+    @apply ml-5 mb-2 list-disc;
+  }
+  
+  .markdown blockquote {
+    @apply my-5 p-5 bg-charcoal-100 border-l-4 border-charcoal-300;
+  }
+  
+  .markdown code {
+    @apply bg-charcoal-200 px-1 py-0.5 rounded;
+  }
+  
+  .markdown pre {
+    @apply bg-charcoal-200 p-3 rounded overflow-auto;
+  }

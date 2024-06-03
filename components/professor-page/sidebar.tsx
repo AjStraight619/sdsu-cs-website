@@ -13,8 +13,10 @@ import {
 } from "lucide-react";
 import React, { ReactElement, useState } from "react";
 import SidebarButton from "../ui/sidebar-button";
-import { SidebarLink, SidebarSubLink } from "@/types/class-page";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import { SidebarLink, SidebarSubLink } from "@/lib/types";
+import { useActiveCourse } from "@/hooks/useActiveCourse";
+import { useActiveProfessor } from "@/hooks/useActiveProfessor";
+import { usePathname, useSearchParams } from "next/navigation";
 
 // framer-motion variants for sidebar items
 
@@ -51,58 +53,35 @@ const menuItemAnimation = {
   }),
 };
 
-// const showAnimation = {
-//   hidden: {
-//     width: 0,
-//     opacity: 0,
-//     transition: {
-//       duration: 0.5,
-//     },
-//   },
-//   show: {
-//     opacity: 1,
-//     width: "auto",
-//     transition: {
-//       duration: 0.5,
-//     },
-//   },
-// };
-
-type SidebarProps = {
-  profName: string;
-};
-
-export default function Sidebar({ profName }: SidebarProps) {
+export default function Sidebar() {
   // ? Probably just going to use hashes with the sidebar to navigate to certain sections on the page? And then use top nav for page routing?
 
   return (
     // <nav className="fixed left-0 w-40 top-16 border-r border-muted-foreground h-full bg-background">
-    <ul className="flex flex-col items-center justify-start gap-y-2 p-2">
-      {sidebarLinks.map((item, idx) => (
-        <div key={idx} className="w-full">
-          {item.subLinks ? (
-            <SidebarDropdownItem
-              subLinks={item.subLinks}
-              label={item.label}
-              hash={item.hash}
-              icon={item.icon}
-              // course={course}
-              profName={profName}
-            />
-          ) : (
-            <SidebarItem
-              profName={profName}
-              hasRoute={item.hasRoute}
-              route={item.route}
-              label={item.label}
-              hash={item.hash}
-              icon={item.icon}
-              // course={course}
-            />
-          )}
-        </div>
-      ))}
-    </ul>
+    <aside>
+      <ul className="flex flex-col items-center justify-start gap-y-2 p-2">
+        {sidebarLinks.map((item, idx) => (
+          <div key={idx} className="w-full">
+            {item.subLinks ? (
+              <SidebarDropdownItem
+                subLinks={item.subLinks}
+                label={item.label}
+                hash={item.hash}
+                icon={item.icon}
+              />
+            ) : (
+              <SidebarItem
+                hasRoute={item.hasRoute}
+                route={item.route}
+                label={item.label}
+                hash={item.hash}
+                icon={item.icon}
+              />
+            )}
+          </div>
+        ))}
+      </ul>
+    </aside>
   );
 }
 
@@ -110,7 +89,6 @@ type SidebarDropdownItemProps = {
   label: string;
   subLinks: SidebarSubLink[];
   hash?: string;
-  profName: string;
   icon: ReactElement;
 };
 
@@ -121,15 +99,23 @@ function SidebarDropdownItem({
   subLinks,
   hash,
   icon,
-  profName,
 }: SidebarDropdownItemProps) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
+  // const course = useActiveCourse()
+  // const professor =
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const section = searchParams.get("section");
 
   return (
     <div className="w-full flex flex-col">
       <SidebarButton
-        className={`flex items-center justify-start gap-x-2 w-full `}
+        className={`  transition-colors hover:text-charcoal-900 flex items-center gap-x-2 ${
+          section?.toLowerCase() === label.toLowerCase()
+            ? "text-bright-red underline"
+            : "text-muted-foreground"
+        }`}
         onClick={toggleDropdown}
       >
         <span>{icon}</span>
@@ -162,11 +148,15 @@ function SidebarDropdownItem({
                 <Button
                   size="sm"
                   variant="link"
-                  className="text-muted-foreground dark:hover:text-gray-50 transition-colors hover:text-black"
+                  className={`  transition-colors hover:text-charcoal-900 ${
+                    section?.toLowerCase() === label.toLowerCase()
+                      ? "text-bright-red"
+                      : "text-muted-foreground"
+                  }`}
                 >
                   <Link
                     className="w-full"
-                    href={`/class/${profName}/module/${subLink.hash}`}
+                    href={`${pathname}?section=${label}`}
                   >
                     {subLink.label}
                   </Link>
@@ -181,7 +171,6 @@ function SidebarDropdownItem({
 }
 
 export type SidebarItemProps = {
-  profName: string;
   hasRoute: boolean;
   route: string | undefined;
   label: string;
@@ -192,7 +181,6 @@ export type SidebarItemProps = {
 // Single Side bar item
 
 function SidebarItem({
-  profName,
   hasRoute,
   route,
   label,
@@ -200,15 +188,22 @@ function SidebarItem({
   icon,
 }: // course,
 SidebarItemProps) {
+  const searchParams = useSearchParams();
+  const section = searchParams.get("section");
+  const pathname = usePathname();
   return (
     <motion.li>
       <Button
         variant="link"
-        className="flex items-center justify-start text-black"
+        className={`  transition-colors hover:text-charcoal-900 ${
+          section?.toLowerCase() === label.toLowerCase()
+            ? "text-bright-red underline"
+            : "text-muted-foreground"
+        }`}
       >
         <Link
           className="w-full flex items-center gap-x-2"
-          href={`/class/${profName}/${route}`}
+          href={`${pathname}?section=${label}`}
         >
           <span>{icon}</span>
           <span>{label}</span>

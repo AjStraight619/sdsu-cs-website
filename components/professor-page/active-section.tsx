@@ -1,10 +1,23 @@
 "use client";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import { useCourse } from "@/hooks/useCourse";
 import { ReactNode } from "react";
+import Syllabus from "./syllabus";
+import { usePathname, useSearchParams } from "next/navigation";
 
-export default function ActiveSection() {
+type ActiveSectionProps = {
+  filesAndFolders: any[];
+  markdownContent: string;
+};
+
+export default function ActiveSection({
+  filesAndFolders,
+  markdownContent,
+}: ActiveSectionProps) {
   const course = useCourse();
+  const searchParams = useSearchParams();
+  const section = searchParams.get("section");
+  const pathname = usePathname();
+  const prof = decodeURIComponent(pathname.split("/").pop()!);
 
   const renderSubHeader = (classCode: string) => {
     const parts = classCode.split("-");
@@ -15,10 +28,13 @@ export default function ActiveSection() {
 
   return (
     <div className="flex flex-col gap-y-2 select-none justify-start items-start w-full">
-      <ActiveSectionHeader>{course}</ActiveSectionHeader>
+      <ActiveSectionHeader>{section}</ActiveSectionHeader>
       <ActiveSectionSubHeader>
-        {renderSubHeader(course.toUpperCase())}
+        <span>{prof} </span>
+        <span>- </span>
+        <span>{renderSubHeader(course.toUpperCase())}</span>
       </ActiveSectionSubHeader>
+      <Syllabus markdownContent={markdownContent} />
     </div>
   );
 }

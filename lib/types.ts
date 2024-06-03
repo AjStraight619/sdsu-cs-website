@@ -9,3 +9,9 @@ export type SidebarLink = {
 };
 
 export type SidebarSubLink = Omit<SidebarLink, "icon">;
+
+export type ProfessorsFolder = {
+  id: string;
+  name: string;
+  imageUrl: string;
+};

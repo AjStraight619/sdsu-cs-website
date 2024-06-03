@@ -1,7 +1,7 @@
 import { usePathname } from "next/navigation";
 
-export function useActiveSection() {
+export const useActiveProfessor = () => {
   const pathname = usePathname();
   const parts = pathname.split("/");
-  return parts.pop();
-}
+  return parts[3];
+};

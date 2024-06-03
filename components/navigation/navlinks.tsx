@@ -7,9 +7,9 @@ export default function NavLinks() {
     <div>
       <Menu className="sm:hidden" />
       <div className="hidden gap-4 sm:flex">
-        <NavLink href="/classes?course=CS150" text="CS150" />
-        <NavLink href="/classes?course=CS160" text="CS160" />
-        <NavLink href="/classes?course=CS210" text="CS210" />
+        <NavLink href="/classes/CS150" text="CS150" />
+        <NavLink href="/classes/CS160" text="CS160" />
+        <NavLink href="/classes/CS210" text="CS210" />
       </div>
     </div>
   );

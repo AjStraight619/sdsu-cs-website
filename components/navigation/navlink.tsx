@@ -1,7 +1,7 @@
 "use client";
 
+import { useActiveCourse } from "@/hooks/useActiveCourse";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 interface INavLink {
   href: string;
@@ -9,10 +9,8 @@ interface INavLink {
 }
 
 export default function NavLink({ href, text }: INavLink) {
-  const searchParams = useSearchParams();
-  const currentCourse = searchParams.get("course");
-  console.log("current course: ", currentCourse);
-  console.log("text: ", text);
+  const currentCourse = useActiveCourse();
+
   return (
     <Link
       className={`font-medium font-inter text-base hover:text-charcoal-800 hover:underline transition-colors duration-150 ${
