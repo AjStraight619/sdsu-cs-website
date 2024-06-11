@@ -52,7 +52,7 @@ export default function RegisterForm() {
                   Email
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="professor@sdsu.edu" {...field} />
+                  <Input type='email' placeholder="professor@sdsu.edu" {...field} />
                 </FormControl>
                 <FormDescription>
                   This email must match your official sdsu email.
@@ -67,7 +67,7 @@ export default function RegisterForm() {
                   Password
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="*****" {...field} />
+                  <Input type='password' placeholder="*********" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
