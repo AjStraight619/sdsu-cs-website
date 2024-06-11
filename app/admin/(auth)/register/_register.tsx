@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ErrorMessage, SuccessMessage } from "@/components/ui/form-messages";
 import { Input } from "@/components/ui/input";
+import SubmitButton from "@/components/ui/submit-button";
 import { RegisterSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState, useTransition } from "react";
@@ -71,6 +72,9 @@ export default function RegisterForm() {
                 <FormMessage />
               </FormItem>
             )} />
+            <SubmitButton>
+              Register
+            </SubmitButton>
           </form>
         </Form>
       </CardContent>
