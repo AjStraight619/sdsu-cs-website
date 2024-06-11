@@ -7,6 +7,8 @@ import Modules from "@/components/dashboard/modules";
 import CourseSelection from "@/components/common/course-selection";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
+import UploadImage from "@/components/dashboard/upload-image";
+import { getSignedURL } from "@/actions/s3";
 
 type AdminDashboardProps = {
   params: {
@@ -28,11 +30,16 @@ export default async function AdminDashboard({
   // Going to use suspense here to give a nice loading state
   const courseInfo = await db.course.findFirst({
     where: {},
-  });
+  })
+
+  // const signedUrl = await getSignedURL()
+  // console.log("Signed url in Admin Dashboard: ", signedUrl)
 
   return (
-    <div className="min-h-screen flex flex-col p-12 space-y-6">
+    <div className="min-h-screen flex flex-col p-12 space-y-6 pt-24">
+
       <Header className="text-center mb-12" />
+      <UploadImage />
       <div className="flex flex-col items-center justify-start space-y-8 container">
         <section className="flex flex-row items-start justify-between w-full gap-x-4">
           <Profile />

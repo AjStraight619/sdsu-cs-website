@@ -18,10 +18,16 @@ export const LoginSchema = z.object({
   email: z.string().email({
     message: "Email is required",
   }),
+  name: z.string().min(1, {
+    message: "Name is required"
+  }),
   password: z.string().min(1, {
     message: "Password is required",
   }),
 });
+
+
+
 
 export const FileSchema = z.custom<File>(
   (file) => {
@@ -29,11 +35,17 @@ export const FileSchema = z.custom<File>(
       return false;
     }
 
-    // 5MB
+    // Allowed file types
+    const allowedFileTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedFileTypes.includes(file.type)) {
+      return false;
+    }
+
+    // Max file size (5MB)
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
     return file.size <= MAX_FILE_SIZE;
   },
   {
-    message: "File size should be less than 5MB",
+    message: "File must be an image (JPEG, PNG, GIF) and less than 5MB",
   }
 );
