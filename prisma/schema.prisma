@@ -27,17 +27,17 @@ model Course {
   title       String
   description String?
   content     String?
-  files       File[]
+  // files       File[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model File {
-  id        String   @id @default(cuid())
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-  fileName  String
-  fileUrl   String // S3 URL
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model File {
+//   id        String   @id @default(cuid())
+//   courseId  String
+//   course    Course   @relation(fields: [courseId], references: [id])
+//   fileName  String
+//   fileUrl   String // S3 URL
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

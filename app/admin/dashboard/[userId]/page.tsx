@@ -28,9 +28,9 @@ export default async function AdminDashboard({
 
   // Fetch course info here and dump it into the syllbus, course component, and modules component
   // Going to use suspense here to give a nice loading state
-  const courseInfo = await db.course.findFirst({
-    where: {},
-  })
+  // const courseInfo = await db.course.findFirst({a
+  //   where: {},
+  // })
 
   // const signedUrl = await getSignedURL()
   // console.log("Signed url in Admin Dashboard: ", signedUrl)
