@@ -72,7 +72,7 @@ export default function RegisterForm() {
                 <FormMessage />
               </FormItem>
             )} />
-            <SubmitButton>
+            <SubmitButton isPending={isPending}>
               Register
             </SubmitButton>
           </form>

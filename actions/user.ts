@@ -1,23 +1,13 @@
+"use server"
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { RegisterSchema } from "@/lib/schemas";
 import { User } from "@prisma/client";
 import "server-only";
+import { z } from "zod";
 
-export const getUserByEmail = async (
-  email: string
-): Promise<User | undefined> => {
-  console.log("in getUserByEmail function ");
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
 
-    console.log("(In getUserByEmail function), user: ", { user });
-    if (!user) return;
-    return user;
-  } catch (err) {
-    // TODO: Implement getErrorMessage util function.
-    throw new Error("Something went wrong");
-  }
-};
+export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
+  const session = await auth()
+
+}
