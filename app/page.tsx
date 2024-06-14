@@ -1,12 +1,14 @@
-import Courses from "@/components/landing-page/courses";
-import Header from "@/components/common/header";
-import { Button } from "@/components/ui/button";
+import { db } from "@/lib/db";
 
-export default function Home() {
+export default async function HomePage() {
+	// const user = await db.user.findUnique({
+	// 	where: {
+	// 		email: "test@user.com"
+	// 	}
+	// })
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-between p-24 gap-y-8">
-			<Header />
-			{/* <Courses /> */}
+		<div>
+
 		</div>
-	);
+	)
 }

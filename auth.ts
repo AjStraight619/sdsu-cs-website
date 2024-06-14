@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { compare } from "bcryptjs";
-import { getUserByEmail } from "./actions/user";
+import { getUserByEmail } from "./server-only/users";
 import { LoginSchema } from "./lib/schemas";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

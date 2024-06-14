@@ -1,6 +1,7 @@
 import "server-only"
 import { db } from "@/lib/db";
 import { User } from "@prisma/client";
+import { bcrypt } from "bcrypt"
 
 // Files marked with server-only do not mutate data
 
@@ -23,3 +24,18 @@ export const getUserByEmail = async (
     throw new Error("Something went wrong");
   }
 };
+
+// export const getUserFromDb = async (email: string, password: string): Promise<User | undefined> => {
+//   try {
+//     const user = await db.user.findUnique({
+//       where: {
+//         email
+//       }
+//     })
+//     if (!user) {
+//       return null
+//     }
+//   } catch (err) {
+
+//   }
+// }
