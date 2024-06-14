@@ -1,7 +1,6 @@
 import "server-only"
 import { db } from "@/lib/db";
 import { User } from "@prisma/client";
-import { bcrypt } from "bcrypt"
 
 // Files marked with server-only do not mutate data
 
