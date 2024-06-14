@@ -35,7 +35,7 @@ export default function RegisterForm() {
           setError(data.error.message)
           return
         }
-        if (data.success && data.success.data) {
+        if (data.success) {
           setSuccess("Email verification sent")
         }
       })
