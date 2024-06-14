@@ -1,7 +1,7 @@
 "use client"
 
 import { Separator } from "../ui/separator"
-
+import { useState } from "react"
 type Option = "Home" | "Syllabus" | "Modules"
 
 const options: Option[] = ["Home", "Syllabus", "Modules"]
