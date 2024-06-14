@@ -1,8 +1,8 @@
 
-import { type ProfessorCard } from "@/lib/types"
+import { type TProfessorCard } from "@/lib/types"
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import Image from "next/image"
-type ProfessorCardProps = ProfessorCard
+type ProfessorCardProps = TProfessorCard
 export default function ProfessorCard({ imageUrl, name, bio, courses }: ProfessorCardProps) {
 
   return (
