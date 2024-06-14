@@ -9,9 +9,6 @@ type ProfessorCardsProps = {
 export default function ProfessorCards({ professorCards }: ProfessorCardsProps) {
   return (
     <>
-      {professorCards.map((card, idx) => (
-        <ProfessorCard key={idx} />
-      ))}
     </>
   )
 }
