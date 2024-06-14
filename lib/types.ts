@@ -17,7 +17,7 @@ export type ProfessorsFolder = {
 };
 
 
-export type ProfessorCard = {
+export type TProfessorCard = {
   imageUrl: string
   name: string
   bio: string
