@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import UploadImage from "@/components/dashboard/upload-image";
 import { getSignedURL } from "@/actions/s3";
-import { ProfessorCard as TProfessorCard } from "@/lib/types";
+import { TProfessorCard } from "@/lib/types";
 import ProfessorCard from "@/components/common/professor-card"
 type AdminDashboardProps = {
   params: {
