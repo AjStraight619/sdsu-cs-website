@@ -1,22 +1,24 @@
 "use client";
-import { createUser } from "@/actions/user";
+import { createUserFD } from "@/actions/user";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ErrorMessage, SuccessMessage } from "@/components/ui/form-messages";
 import { Input } from "@/components/ui/input";
-import SubmitButton from "@/components/ui/submit-button";
+
 import { RegisterSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import SubmitButton2 from "@/components/ui/submit-button2";
+import { createUserTest } from "@/actions/test";
 
 export default function RegisterForm() {
-  const [isPending, startTransition] = useTransition()
+
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const { push } = useRouter()
+  // const { push } = useRouter()
   const form = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -26,21 +28,37 @@ export default function RegisterForm() {
       confirmPassword: "",
     }
   })
-  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    setError("")
-    setSuccess("")
-    startTransition(() => {
-      createUser(values).then((data) => {
-        if (!data.success && data.error && typeof data.error.message === 'string') {
-          setError(data.error.message)
-          return
-        }
-        if (data.success) {
-          setSuccess("Email verification sent")
-        }
-      })
-    })
+
+  // const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+  //   setError("");
+  //   setSuccess("");
+  //   startTransition(() => {
+  //     createUserTest(values).then((data) => {
+  //       console.log("data from server action: ", data)
+  //     })
+  //   })
+  // };
+
+  // const createUserClient = async (formData: FormData) => {
+  //   const name = formData.get("name")
+
+  //   const email = formData.get("email")
+
+  //   console.log(name, email)
+
+  // }
+
+  const createUser = async (formData: FormData) => {
+    const data = await createUserFD(formData);
+    console.log("Response data: ", data);
+    if (data.error) {
+      setError(data.error);
+      return;
+    } else if (data.user) {
+      setSuccess("Email verification sent!");
+    }
   }
+
 
 
   return (
@@ -49,6 +67,9 @@ export default function RegisterForm() {
         <CardTitle>
           Register
         </CardTitle>
+        <CardDescription>
+          This form is restricted to SDSU CS professors.
+        </CardDescription>
       </CardHeader>
       <CardContent className='space-y-6'>
         {error && (
@@ -58,8 +79,9 @@ export default function RegisterForm() {
           <SuccessMessage message={success} />
         )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          <form action={createUser} className='space-y-4'>
             <FormField name='email' control={form.control} render={({ field }) => (
+
               <FormItem>
                 <FormLabel>
                   Email
@@ -111,9 +133,9 @@ export default function RegisterForm() {
               </FormItem>
             )} />
 
-            <SubmitButton isPending={isPending}>
+            <SubmitButton2>
               Register
-            </SubmitButton>
+            </SubmitButton2>
           </form>
         </Form>
       </CardContent>

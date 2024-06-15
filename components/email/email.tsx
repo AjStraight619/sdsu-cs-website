@@ -18,25 +18,35 @@ type ContactFormEmailProps = {
 };
 
 export default function VerificationEmail({
-  message,
-  senderEmail,
-  verificationUrl
+  verificationUrl,
 }: ContactFormEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Confirm Email</Preview>
+      <Preview>Confirm Your Email</Preview>
       <Tailwind>
         <Body className="bg-gray-100 text-black">
           <Container>
             <Section className="bg-white borderBlack my-10 px-10 py-4 rounded-md">
               <Heading className="leading-tight">
-                You received the following message from the register form
+                Email Verification Required
               </Heading>
 
-              <Text>{message}</Text>
+              <Text>
+                Thank you for registering! Please click the link below to verify your email address and complete your registration:
+              </Text>
+
+              <Text>
+                <a href={verificationUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                  Verify your email
+                </a>
+              </Text>
+
               <Hr />
-              {/*  <Text>The sender's email is: {senderEmail}</Text> */}
+
+              <Text>
+                If you did not register for an account, please ignore this email.
+              </Text>
             </Section>
           </Container>
         </Body>

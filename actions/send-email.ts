@@ -4,19 +4,22 @@ import VerificationEmail from "@/components/email/email"
 import { getErrorMessage } from "@/lib/utils"
 import { Resend } from "resend"
 import { assert } from "console"
-const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:3000/api" : ""
+const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:3000/api/verify-email" : "https://sdsu-cs-website.vercel.app"
+// TODO: Test prod api key
+const devEnv = process.env.NODE_ENV === 'development'
+const resend = new Resend(process.env.RESEND_API_KEY_PROD!)
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
+console.log(process.env.RESEND_API_KEY_PROD!)
 
 export const sendEmail = async (email: string, token: string, userId: string) => {
-  assert(typeof email === 'string' && email.includes('@'), 'Invalid email format');
-  assert(typeof token === 'string' && token.length > 0, 'Invalid token');
+  // assert(typeof email === 'string' && email.includes('@'), 'Invalid email format');
+  // assert(typeof token === 'string' && token.length > 0, 'Invalid token');
 
-  const verificationUrl = `${baseUrl}/verify-email?token=${token}&userId=${userId}`
+  const verificationUrl = `${baseUrl}?token=${token}&userId=${userId}`
   let data;
   try {
     data = await resend.emails.send({
-      from: "Verification Token ComputerScienceSDSU@gmail.com",
+      from: "no-reply@sdsu-cs.com",
       to: email,
       subject: "Verification",
       react: React.createElement(VerificationEmail, {
@@ -24,7 +27,9 @@ export const sendEmail = async (email: string, token: string, userId: string) =>
         message: ""
       })
     })
+    console.log("data: ", data)
   } catch (error) {
+    console.error("error: ", error)
     return {
       data: null,
       error: getErrorMessage(error)
