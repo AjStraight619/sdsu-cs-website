@@ -1,21 +1,8 @@
 import React, { Suspense } from "react";
-import Header from "@/components/common/header";
-import DragnDrop from "@/components/dashboard/dragndrop";
-import Syllabus from "@/components/dashboard/syllabus";
-import Profile from "@/components/common/profile";
-import Modules from "@/components/dashboard/modules";
-import CourseSelection from "@/components/common/course-selection";
-import { db } from "@/lib/db";
-import { Button } from "@/components/ui/button";
-import UploadImage from "@/components/dashboard/upload-image";
-import { getSignedURL } from "@/actions/s3";
-import { TProfessorCard } from "@/lib/types";
+
 import ProfessorCard from "@/components/common/professor-card";
 import ProfessorCourses from "@/components/dashboard/professor-courses";
 import SectionDivider from "@/components/ui/section-divider";
-import CourseInfo from "@/components/dashboard/course-info";
-import EditableProfessorCard from "@/components/dashboard/editable-professor-card";
-import { redirect } from "next/navigation";
 import ProfessorCardLoading from "@/components/loading/professor-card-loading";
 import CourseActionsLoading from "@/components/loading/course-actions-loading";
 
