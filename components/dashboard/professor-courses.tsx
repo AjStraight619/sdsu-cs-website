@@ -12,7 +12,7 @@ type ProfessorCoursesProps = {
 
 export default async function ProfessorCourses({ course }: ProfessorCoursesProps) {
 
-  await wait(5000)
+  /*   await wait(5000) */
   const session = await auth()
   if (!session || !session.user) {
     redirect("/admin/login")
@@ -41,9 +41,6 @@ export default async function ProfessorCourses({ course }: ProfessorCoursesProps
     currentCourseId = coursesInfo[currentCourseIdx].id;
   }
 
-  return (
-    <div className="flex flex-row items-center gap-x-4 h-8">
-      <CourseActions courses={coursesInfo} />
-    </div>
-  )
+  return <CourseActions courses={coursesInfo} currentCourse={course} />
+
 }

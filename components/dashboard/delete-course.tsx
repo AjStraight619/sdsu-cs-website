@@ -17,9 +17,12 @@ export default function DeleteCourse({ courseId, handleDeleteCourse, className }
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-
-        <CircleMinusIcon className="absolute top-0 left-1" size={20} />
-
+        <Button className="flex items-center gap-x-2" variant='outline'>
+          <CircleMinusIcon size={15} />
+          <span>
+            Delete
+          </span>
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

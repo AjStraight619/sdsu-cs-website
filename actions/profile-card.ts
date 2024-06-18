@@ -1,16 +1,49 @@
 "use server"
 
+import { auth } from "@/auth"
+import { db } from "@/lib/db"
 import { ProfileSchema } from "@/lib/schemas"
+import { revalidatePath } from "next/cache"
 
 
 export async function updateProfileCard(data: FormData) {
+  const session = await auth()
+  if (!session || !session.user) {
+    return { failure: "Not authenticated" }
+  }
   const formData = Object.fromEntries(data)
-  const parsed = ProfileSchema.safeParse(formData)
+  const parsedData = ProfileSchema.safeParse(formData)
 
-  console.log("Parsed data: ", parsed)
+  if (!parsedData.success) {
+    return { failure: "Invalid data format" }
+  }
 
-  return parsed
-  // Update profile here
-  // TODO: Check if formdata contains a file, this will be an image file that we need to store in s3 and then save the url from s3 to db
+  const bucketName = process.env.AWS_BUCKET_NAME;
+  const region = process.env.AWS_BUCKET_REGION;
+  const objectKey = `profile-image-${session.user.id}`;
+  const imageUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${objectKey}`;
 
+  try {
+    await db.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        name: formData.name as string,
+        image: imageUrl,
+        bio: formData.bio as string,
+      }
+    })
+
+    return {
+      success: "Successfully updated profile."
+    }
+
+  } catch (err) {
+    console.error(err)
+    return { failure: "Failed to update profile." }
+
+  } finally {
+    revalidatePath("/admin/dashboard")
+  }
 }

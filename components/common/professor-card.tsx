@@ -12,9 +12,6 @@ import { wait } from "@/lib/utils"
 
 export default async function ProfessorCard() {
 
-
-  await wait(10000)
-
   const session = await auth()
   if (!session || !session.user) {
     redirect("/login")

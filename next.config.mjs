@@ -8,6 +8,13 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cs-website-sdsu.s3.us-west-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+      // Add more remote patterns as needed
     ],
   },
 };

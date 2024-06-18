@@ -4,7 +4,6 @@ import { CirclePlusIcon, PlusIcon } from "lucide-react"
 import { Button } from "../ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Input } from "../ui/input"
-import { Separator } from "../ui/separator"
 import { addCourse, deleteCourse } from "@/actions/courses"
 import { useCallback, useEffect, useOptimistic, useState } from "react"
 import { useDebouncedCallback } from 'use-debounce'
@@ -15,9 +14,13 @@ import SubmitButton2 from "../ui/submit-button2"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { motion } from 'framer-motion'
+import DeleteCourse from './delete-course'
 
 type ProfessorOptionsProps = {
   courses: Course[] | undefined
+  currentCourse: string
 }
 
 type Course = {
@@ -42,7 +45,22 @@ function reducer(state: Course[] | undefined, action: Action) {
   }
 }
 
-export default function CourseActions({ courses }: ProfessorOptionsProps) {
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0 },
+};
+
+export default function CourseActions({ courses, currentCourse }: ProfessorOptionsProps) {
 
   const [input, setInput] = useState("")
   const [optimisticCourses, dispatch] = useOptimistic(courses, reducer)
@@ -143,39 +161,11 @@ export default function CourseActions({ courses }: ProfessorOptionsProps) {
 
 
   return (
-    <div className="flex flex-row items-center gap-x-4 h-8">
-      <Select onValueChange={(value) => handlePathChange(value)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder={optimisticCourses?.at(0)?.title ?? "No courses"} />
-        </SelectTrigger>
-        <SelectContent>
-          {optimisticCourses?.map((course) => (
-            <SelectItem value={course.title} key={course.id}>
-              {course.title}
-            </SelectItem>
-          ))}
-        </SelectContent>
-        {/* <motion.ul className='flex items-center gap-x-2 h-full'> */}
-        {/*   {optimisticCourses?.map((course) => ( */}
-        {/*     <React.Fragment key={course.id}> */}
-        {/*       <motion.li onClick={() => handlePathChange(course.title)} className={`${course.pending ? "text-muted-foreground " : "text-black hover:cursor-pointer"}  h-12 p-6 transition-colors duration-300 relative`} > */}
-        {/*         <div className="h-full flex items-center"> */}
-        {/*           {/*  <DeleteCourse courseId={course.id} handleDeleteCourse={handleDeleteCourse} className='absolute top-1 left-1 h-full w-full' /> */}
-        {/*           <span className={`${currentCourse === course.title ? "text-bright-red underline" : ""}`} > */}
-        {/*             {course.title} */}
-        {/*           </span> */}
-        {/*         </div> */}
-        {/*       </motion.li> */}
-        {/*              </React.Fragment> */}
-        {/*   ))} */}
-
-        {/* </motion.ul> */}
-      </Select>
-
+    <Card className="w-full sm:w-1/2 relative self-start">
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="flex items-center gap-x-1" variant="outline">
-            <PlusIcon size={20} />
+          <Button className="flex items-center gap-x-1 absolute top-2 right-2" variant="outline">
+            <CirclePlusIcon size={17} />
             <span>
               Add Course
             </span>
@@ -203,7 +193,61 @@ export default function CourseActions({ courses }: ProfessorOptionsProps) {
           </div>
         </PopoverContent>
       </Popover>
+      <CardHeader>
+        <CardTitle>
+          My Courses
+        </CardTitle>
+        <CardDescription>
+          Manage your courses
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col">
+          {/* <Select onValueChange={(value) => handlePathChange(value)}> */}
+          {/*   <SelectTrigger className="w-[180px]"> */}
+          {/*     <SelectValue placeholder={optimisticCourses?.at(0)?.title ?? "No courses"} /> */}
+          {/*   </SelectTrigger> */}
+          {/*   <SelectContent> */}
+          {/*     {optimisticCourses?.map((course) => ( */}
+          {/*       <SelectItem value={course.title} key={course.id}> */}
+          {/*         {course.title} */}
+          {/*       </SelectItem> */}
+          {/*     ))} */}
+          {/*   </SelectContent> */}
 
-    </div>
+          {/*    </Select> */}
+          <motion.ul
+            className="flex flex-col gap-y-3 h-full"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {optimisticCourses?.map((course) => (
+              <motion.li
+                key={course.id}
+                onClick={() => handlePathChange(course.title)}
+                className={`${course.pending ? "text-muted-foreground " : "text-black hover:cursor-pointer"} ${currentCourse === course.title ? "bg-muted" : ""} p-2 rounded-md transition-colors duration-300 relative w-full hover:bg-muted`}
+                variants={course.pending ? {} : itemVariants}
+                initial={course.pending ? false : "hidden"}
+                animate={course.pending ? false : "visible"}
+              >
+                <div className="h-full flex items-center justify-between">
+                  <span className={`${currentCourse === course.title ? "underline text-bright-red" : ""}`}>
+                    {course.title}
+                  </span>
+                  {currentCourse === course.title && (
+                    <DeleteCourse courseId={course.id} handleDeleteCourse={handleDeleteCourse} />
+                  )}
+                </div>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+
+        </div>
+
+      </CardContent>
+
+    </Card>
   )
 }

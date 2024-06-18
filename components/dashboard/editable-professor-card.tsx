@@ -28,6 +28,8 @@ type EditableProfessorCardProps = {
 export default function EditableProfessorCard({ imageUrl, name, bio, courses }: EditableProfessorCardProps) {
   const [isEditing, setIsEditing] = useState(false)
   const pathname = usePathname()
+  const [success, setSuccess] = useState<string | undefined>(undefined)
+  const [error, setError] = useState("")
   const [previewImageUrl, setPreviewImageUrl] = useState("")
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -66,25 +68,44 @@ export default function EditableProfessorCard({ imageUrl, name, bio, courses }: 
     }
   }
 
+  const computeSHA256 = async (file: File) => {
+    const buffer = await file.arrayBuffer()
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map((b) => b.toString().padStart(2, "0")).join("")
+    return hashHex
+  }
+
 
 
   const action = async (formData: FormData) => {
-    // ... call function to update profile card
-    /*    const results = await updateProfileCard(formData) */
-    const signedUrlResult = await getSignedURL()
-
-    if (signedUrlResult.failure !== undefined) {
-      return
-    }
-    const url = signedUrlResult.success.url
+    setSuccess("")
+    setError("")
 
     if (file) {
-      formData.append("imageUrl", url)
-      formData.append("image", file)
+      const checksum = await computeSHA256(file)
+      const signedUrlResult = await getSignedURL(file.type, file.size, checksum)
+      if (signedUrlResult.failure !== undefined) {
+        setError("Failed to retrieve signed url")
+        return
+      }
+      const url = signedUrlResult.success.url
+      await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type
+        }
+      })
     }
 
-    const result = await updateProfileCard(formData)
-    console.log("result from server action: ", result)
+    const { success, failure } = await updateProfileCard(formData)
+    if (failure) {
+      setError(failure)
+    } else {
+      setSuccess(success)
+    }
+
   }
 
 
@@ -108,7 +129,7 @@ export default function EditableProfessorCard({ imageUrl, name, bio, courses }: 
     <Dialog open={isEditing} onOpenChange={setIsEditing}>
       <DialogTrigger asChild>
         <Button onClick={() => setIsEditing(true)} variant='outline' className="absolute top-2 right-2 flex items-center gap-x-1">
-          <PencilIcon size={20} />
+          <PencilIcon size={15} />
           <span>Edit</span>
         </Button>
       </DialogTrigger>
