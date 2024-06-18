@@ -22,7 +22,7 @@ export default async function VerifyEmailPage({ searchParams }: VerifyEmailPageP
 			},
 		})
 
-		if (!tokenRecord || tokenRecord.expiresAt < new Date()) {
+		if (!tokenRecord || tokenRecord.expiresAt < new Date() || !tokenRecord.userId) {
 			message = "Invalid or expired token."
 		} else {
 			await db.$transaction([
