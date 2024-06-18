@@ -5,11 +5,7 @@ export const RegisterSchema = z
     name: z.string().min(1, {
       message: "Name is required"
     }),
-    email: z.string().email().min(1, {
-      message: "Email is required"
-    }).max(100, {
-      message: "Email too long"
-    }),
+    email: z.string().email(),
     password: z.string().min(8, {
       message: "Password too short",
     }),
@@ -31,7 +27,14 @@ export const LoginSchema = z.object({
   }),
 });
 
-
+export const ProfileSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required"
+  }),
+  bio: z.string().max(80, {
+    message: "Exceed max character limit (80)"
+  }).optional()
+})
 
 
 export const FileSchema = z.custom<File>(

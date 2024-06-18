@@ -4,7 +4,7 @@ import VerificationEmail from "@/components/email/email"
 import { getErrorMessage } from "@/lib/utils"
 import { Resend } from "resend"
 import { assert } from "console"
-const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:3000/api/verify-email" : "https://sdsu-cs-website.vercel.app"
+const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:3000/admin/verify-email" : "https://sdsu-cs.com/admin/verify-email"
 // TODO: Test prod api key
 const devEnv = process.env.NODE_ENV === 'development'
 const resend = new Resend(process.env.RESEND_API_KEY_PROD!)

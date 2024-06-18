@@ -8,19 +8,59 @@ datasource db {
 }
 
 model User {
-  id                String              @id @default(cuid())
+  id                String             @id @default(cuid())
   name              String?
-  email             String              @unique
+  email             String             @unique
   emailVerified     DateTime?
   password          String?
   image             String?
   bio               String?
   courses           Course[]
-  verificationToken VerificationToken[]
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  verificationToken VerificationToken?
+  accounts          Account[]
+  sessions          Session[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// Optional Course model from your schema
 model Course {
   id          String   @id @default(cuid())
   professorId String
@@ -32,11 +72,3 @@ model Course {
   updatedAt   DateTime @updatedAt
 }
 
-model VerificationToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-}

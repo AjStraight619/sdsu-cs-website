@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
 
 export default async function HomePage() {
@@ -6,8 +7,14 @@ export default async function HomePage() {
 	// 		email: "test@user.com"
 	// 	}
 	// })
+	const session = await auth()
+
 	return (
-		<div>
+		<div className="min-h-screen items-center justify-center flex flex-col">
+			<pre>
+
+				{JSON.stringify(session, null, 2)}
+			</pre>
 
 		</div>
 	)

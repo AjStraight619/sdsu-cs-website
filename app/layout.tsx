@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				>
 					<Navbar />
 					<main>{children}</main>
-					{/* <Toaster /> */}
+					<Toaster />
 				</body>
 			</html>
 		</>

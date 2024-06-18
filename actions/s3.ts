@@ -1,5 +1,6 @@
 "use server"
 
+import { auth } from "@/auth"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
@@ -12,7 +13,10 @@ const s3 = new S3Client({
 })
 export async function getSignedURL() {
   // TODO: Remember to implement auth and return a failure object if admin is not signed in.
-
+  const session = await auth()
+  if (!session || !session.user) {
+    return { failure: "Not authenticated" }
+  }
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME!,
     Key: "test-file",
@@ -20,6 +24,7 @@ export async function getSignedURL() {
   const signedUrl = await getSignedUrl(s3, putObjectCommand, {
     expiresIn: 3600,
   })
+
   console.log("signed url: ", signedUrl)
   return { success: { url: signedUrl } }
 }

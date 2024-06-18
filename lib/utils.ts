@@ -20,3 +20,21 @@ export const getErrorMessage = (error: unknown): string => {
 
   return message;
 };
+
+export const validateString = (
+  value: unknown,
+  maxLength: number
+): value is string => {
+  if (!value || typeof value !== "string" || value.length > maxLength) {
+    return false;
+  }
+
+  return true;
+};
+
+export const wait = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+
+

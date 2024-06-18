@@ -5,6 +5,9 @@ export async function POST(req: NextRequest) {
   const verificationToken = req.nextUrl.searchParams.get("token");
   const userId = req.nextUrl.searchParams.get("userId");
 
+  console.log("token: ", verificationToken)
+  console.log("user id: ", userId)
+
   if (!verificationToken) {
     return NextResponse.json({ error: 'Token is required' }, { status: 400 });
   }
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
       where: { token: verificationToken },
     });
 
-    return NextResponse.redirect('/auth/signin');
+    return NextResponse.redirect(new URL("/", req.url));
 
   } catch (error) {
     console.error("Error verifying token:", error);

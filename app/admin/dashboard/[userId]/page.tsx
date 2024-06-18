@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "@/components/common/header";
 import DragnDrop from "@/components/dashboard/dragndrop";
 import Syllabus from "@/components/dashboard/syllabus";
@@ -10,7 +10,15 @@ import { Button } from "@/components/ui/button";
 import UploadImage from "@/components/dashboard/upload-image";
 import { getSignedURL } from "@/actions/s3";
 import { TProfessorCard } from "@/lib/types";
-import ProfessorCard from "@/components/common/professor-card"
+import ProfessorCard from "@/components/common/professor-card";
+import ProfessorCourses from "@/components/dashboard/professor-courses";
+import SectionDivider from "@/components/ui/section-divider";
+import CourseInfo from "@/components/dashboard/course-info";
+import EditableProfessorCard from "@/components/dashboard/editable-professor-card";
+import { redirect } from "next/navigation";
+import ProfessorCardLoading from "@/components/loading/professor-card-loading";
+import CourseActionsLoading from "@/components/loading/course-actions-loading";
+
 type AdminDashboardProps = {
   params: {
     userId: string;
@@ -20,50 +28,65 @@ type AdminDashboardProps = {
   };
 };
 
-const testCardInfo: TProfessorCard =
-{
-  name: "Alex Straight",
-  imageUrl: '/base_profile_picture.jpg',
-  bio: "I am a professor of CS 150 and CS 160....",
-
-}
-
-
 export default async function AdminDashboard({
   params: { userId },
   searchParams: { course },
 }: AdminDashboardProps) {
   console.log("userId: ", userId);
-  console.log("course: ", course);
 
-  // Fetch course info here and dump it into the syllbus, course component, and modules component
-  // Going to use suspense here to give a nice loading state
-  // const courseInfo = await db.course.findFirst({a
-  //   where: {},
-  // })
 
-  // const signedUrl = await getSignedURL()
-  // console.log("Signed url in Admin Dashboard: ", signedUrl)
+
+  // const courseInfoComponent = currentCourseId ? (
+  //   <Suspense fallback={<div>Loading...</div>}>
+  //     <CourseInfo currentCourseId={currentCourseId} courses={courses} />
+  //   </Suspense>
+  // ) : (
+  //   <div>No course selected</div>
+  // );
+
+  // if (!user) {
+  //   redirect("/admin/register")
+  // }
+
+  const res = await fetch("http://localhost:3000/api/parse-pdf", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message: "Yo from the client" }),
+  })
+
+  if (res.ok) {
+    const data = await res.json()
+    console.log("data: ", data)
+  }
+
+  if (!res.ok) {
+    console.error("Something went wrong")
+  }
 
   return (
-    <div className="min-h-screen flex flex-col p-12 space-y-6 pt-24 container">
-      <ProfessorCard name={testCardInfo.name} imageUrl={testCardInfo.imageUrl} bio={testCardInfo.bio} />
+    <div className="min-h-screen flex flex-col p-12 space-y-12 pt-32 container">
+      <div className="flex sm:flex-row items-center sm:items-start sm:justify-between flex-col justify-center">
+        <Suspense fallback={<ProfessorCardLoading />}>
+          <ProfessorCard />
+        </Suspense>
+        <Suspense fallback={<CourseActionsLoading />}>
+          <ProfessorCourses course={course} />
+        </Suspense>
+      </div>
 
-      {/*   <Header className="text-center mb-12" /> */}
-      {/*   <UploadImage /> */}
-      {/*   <div className="flex flex-col items-center justify-start space-y-8 container"> */}
-      {/*     <section className="flex flex-row items-start justify-between w-full gap-x-4"> */}
-      {/*       <Profile /> */}
-      {/*       <CourseSelection /> */}
-      {/*     </section> */}
-      {/*     <section className="flex flex-row items-start justify-between w-full gap-x-4"> */}
-      {/*       <Syllabus /> */}
+      <SectionDivider />
 
-      {/*       {/* You can uncomment Modules and DragnDrop components when needed */}
-      {/*       <Modules /> */}
-      {/*     </section> */}
-      {/*     <DragnDrop /> */}
+
+
+      {/*   <section className="flex flex-col items-center space-y-6"> */}
+      {/*     <h1 className="text-muted-foreground text-2xl sm:text-4xl font-semibold self-start"> */}
+      {/*       {course} */}
+      {/*     </h1> */}
+      {/*     {courseInfoComponent} */}
+      {/*   </section> */}
     </div>
-
   );
 }
+

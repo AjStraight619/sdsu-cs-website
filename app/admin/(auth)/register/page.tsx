@@ -10,9 +10,7 @@ export default async function Register() {
     user = session.user
     redirect(`/admin/dashboard/${user.id}`)
   }
-
-
   return (
     <RegisterForm />
   )
-}
+}  

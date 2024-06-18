@@ -1,3 +1,5 @@
+
+"use server"
 import "server-only"
 import { db } from "@/lib/db";
 import { User } from "@prisma/client";
@@ -13,6 +15,17 @@ export const getUserByEmail = async (
       where: {
         email,
       },
+      select: {
+        id: true,
+        email: true,
+        emailVerified: true,
+        password: true,
+        image: true,
+        name: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     console.log("(In getUserByEmail function), user: ", { user });
@@ -23,18 +36,3 @@ export const getUserByEmail = async (
     throw new Error("Something went wrong");
   }
 };
-
-// export const getUserFromDb = async (email: string, password: string): Promise<User | undefined> => {
-//   try {
-//     const user = await db.user.findUnique({
-//       where: {
-//         email
-//       }
-//     })
-//     if (!user) {
-//       return null
-//     }
-//   } catch (err) {
-
-//   }
-// }
