@@ -17,7 +17,7 @@ export default function DeleteCourse({ courseId, handleDeleteCourse, className }
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="flex items-center gap-x-2" variant='outline'>
+        <Button size='sm' className="flex items-center gap-x-2 text-xs" variant='outline'>
           <CircleMinusIcon size={15} />
           <span>
             Delete

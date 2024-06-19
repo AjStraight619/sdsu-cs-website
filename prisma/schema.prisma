@@ -16,6 +16,7 @@ model User {
   image             String?
   bio               String?
   courses           Course[]
+  syllabi           Syllabus[]
   verificationToken VerificationToken?
   accounts          Account[]
   sessions          Session[]
@@ -60,15 +61,27 @@ model VerificationToken {
   createdAt DateTime @default(now())
 }
 
-// Optional Course model from your schema
 model Course {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   professorId String
-  professor   User     @relation(fields: [professorId], references: [id])
+  professor   User       @relation(fields: [professorId], references: [id])
   title       String
   description String?
   content     String?
+  syllabi     Syllabus[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Syllabus {
+  id          String   @id @default(cuid())
+  professorId String
+  professor   User     @relation(fields: [professorId], references: [id])
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  title       String?
+  description String?
+  url         String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
