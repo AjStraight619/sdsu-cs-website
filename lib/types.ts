@@ -16,10 +16,9 @@ export type ProfessorsFolder = {
   imageUrl: string;
 };
 
-
 export type TProfessorCard = {
-  imageUrl: string
-  name: string
-  bio: string
-  courses?: string[]
-}
+  imageUrl: string;
+  name: string;
+  bio: string;
+  courses?: string[];
+};

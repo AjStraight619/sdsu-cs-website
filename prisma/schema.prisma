@@ -71,6 +71,8 @@ model Course {
   syllabi     Syllabus[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  @@unique([professorId, title])
 }
 
 model Syllabus {

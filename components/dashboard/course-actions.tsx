@@ -103,6 +103,7 @@ export default function CourseActions({
     setInput(input);
   };
 
+  // Validate string entered for course name
   const validateStringFormat = (input: string): string => {
     const trimmedInput = input.trim();
     if (trimmedInput.length < 2) return "";
@@ -123,12 +124,13 @@ export default function CourseActions({
     return "";
   };
 
-  // Validate user input for course names
+  // Validate input every one second when user types
   const validateStringDebounced = useDebouncedCallback((input: string) => {
     const error = validateStringFormat(input);
     setError(error);
   }, 1000);
 
+  // Add course to db and update optimistic courses for immediate feedback
   const handleAddCourse = async (formData: FormData) => {
     setError("");
     const coursename = formData.get("courseName") as string;
@@ -147,7 +149,7 @@ export default function CourseActions({
       payload: { id: nanoid(), title: coursename, pending: true },
     });
     const { error: addCourseError, courseName } = await addCourse(formData);
-    // Close popover here
+
     setIsPopoverOpen(false);
     if (courseName) {
       handlePathChange(courseName);
@@ -172,18 +174,6 @@ export default function CourseActions({
     }
     setInput("");
   };
-
-  // const handleKeyDown = (e: React.KeyboardEvent) => {
-  //   e.preventDefault()
-  //   const formData = new FormData()
-  //   if (e.key !== "Enter") return
-  //   if (!input.trim()) {
-  //     setError("Must have a name")
-  //     return
-  //   }
-  //   formData.append("courseName", input)
-  //   handleAddCourse(formData)
-  // }
 
   const handleDeleteCourse = useCallback(
     async (formData: FormData) => {

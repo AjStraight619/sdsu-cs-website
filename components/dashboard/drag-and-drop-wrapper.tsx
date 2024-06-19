@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-
 import { Progress } from "../ui/progress";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
+import { useMaterial } from "@/context/course-materials-context";
 
-export default function DragnDrop() {
+const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);
+  const { selectedMaterial } = useMaterial();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -24,7 +24,6 @@ export default function DragnDrop() {
         setProgress(percentComplete);
         toast.loading(
           <Progress className="z-[999]" value={percentComplete} />,
-
           { id: "upload-progress" }
         );
       }
@@ -47,53 +46,25 @@ export default function DragnDrop() {
 
     reader.readAsArrayBuffer(file);
 
-    // setTimeout(() => {
-    //   toast.dismiss("upload-success");
-    //   toast.dismiss("upload-progress");
-    //   toast.dismiss("upload-failed");
-    // }, 5000);
-
     return () => {
       reader.abort();
     };
   }, []);
 
-  const simulateLargeFileUpload = () => {
-    const sizeInMB = 1000; // Size of the file to simulate (100MB)
-    const arrayBuffer = new ArrayBuffer(sizeInMB * 1024 * 1024);
-    const simulatedFile = new File([arrayBuffer], "large-file.bin", {
-      type: "application/octet-stream",
-    });
-
-    onDrop([simulatedFile]);
-  };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className="flex flex-col items-center gap-y-2">
-      <div
-        {...getRootProps()}
-        className="border-2 border-dashed border-muted p-4"
-      >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        )}
-      </div>
-      <Button onClick={simulateLargeFileUpload}>
-        Simulate Large File Upload
-      </Button>
-      <Button
-        onClick={() => {
-          toast("yo this is the toast");
-        }}
-      >
-        Show Toast
-      </Button>
+    <div {...getRootProps()} className="border-2 border-dashed p-4">
+      <input {...getInputProps()} />
+      {isDragActive ? (
+        <p>Drop the files here ...</p>
+      ) : (
+        <p>Drag 'n' drop some files here, or click to select files</p>
+      )}
+      {children}
       <Progress value={progress} />
     </div>
   );
-}
+};
+
+export default DragAndDropWrapper;
