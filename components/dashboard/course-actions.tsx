@@ -149,6 +149,9 @@ export default function CourseActions({
     const { error: addCourseError, courseName } = await addCourse(formData);
     // Close popover here
     setIsPopoverOpen(false);
+    if (courseName) {
+      handlePathChange(courseName);
+    }
     console.log("courseName: ", courseName);
     console.log(
       "error: ",
@@ -194,6 +197,7 @@ export default function CourseActions({
       dispatch({ type: "REMOVE", payload: courseId });
       const { success, error } = await deleteCourse(courseId);
       if (success) {
+        handlePathChange("");
         toast("Successfully deleted course");
       } else if (error) {
         toast("Something went wrong", {
@@ -201,7 +205,7 @@ export default function CourseActions({
         });
       }
     },
-    [dispatch]
+    [dispatch, handlePathChange]
   );
 
   return (
