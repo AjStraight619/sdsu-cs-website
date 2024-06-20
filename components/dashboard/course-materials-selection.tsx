@@ -7,7 +7,11 @@ import { Separator } from "../ui/separator";
 const materialOptions: Material[] = ["Home", "Syllabus", "Modules"];
 
 export default function CourseMaterialsSelection() {
-  const { setSelectedMaterial, selectedMaterial } = useMaterial();
+  const { setSelectedMaterial, selectedMaterial, setFiles } = useMaterial();
+  const handleSelectionChange = (option: Material) => {
+    setFiles([]);
+    setSelectedMaterial(option);
+  };
 
   return (
     <nav aria-label="Course materials">
@@ -18,7 +22,7 @@ export default function CourseMaterialsSelection() {
               className={`text-2xl font-semibold ${
                 selectedMaterial === option ? "text-bright-red underline" : ""
               }`}
-              onClick={() => setSelectedMaterial(option)}
+              onClick={() => handleSelectionChange(option)}
             >
               {option}
             </button>

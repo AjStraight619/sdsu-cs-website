@@ -12,9 +12,3 @@ export const classOptions = [
     route: "/cs-210",
   },
 ];
-
-
-export const testingNvimTreeSitter = [{
-  name: '',
-  id: '',
-}]

@@ -1,15 +1,27 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
 
 import { Textarea } from "../ui/textarea";
-import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "../ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "../ui/dialog";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileSchema } from "@/lib/schemas";
 import { updateProfileCard } from "@/actions/profile-card";
 import { getSignedURL } from "@/actions/s3";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import ProfileImage from "../common/profile-image";
 import { Button } from "../ui/button";
 import SubmitButton2 from "../ui/submit-button2";
@@ -25,163 +37,183 @@ type EditableProfessorCardProps = {
   courses?: string[];
 };
 
-export default function EditableProfessorCard({ imageUrl, name, bio, courses }: EditableProfessorCardProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const pathname = usePathname()
-  const [success, setSuccess] = useState<string | undefined>(undefined)
-  const [error, setError] = useState("")
-  const [previewImageUrl, setPreviewImageUrl] = useState("")
-  const [file, setFile] = useState<File | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const renderRef = useRef(0)
+export default function EditableProfessorCard({
+  imageUrl,
+  name,
+  bio,
+  courses,
+}: EditableProfessorCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const pathname = usePathname();
+  const [success, setSuccess] = useState<string | undefined>(undefined);
+  const [error, setError] = useState("");
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const renderRef = useRef(0);
   useEffect(() => {
-    console.log("This component re rendered: ", renderRef.current++)
-  })
+    console.log("This component re rendered: ", renderRef.current++);
+  });
 
   const form = useForm<z.output<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
       name: name ?? "",
       bio: bio ?? "",
-    }
-  })
+    },
+  });
 
-
-
-
-  useEffect(() => {
-    return () => {
-      console.log("revoking url")
-      URL.revokeObjectURL(previewImageUrl)
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     console.log("revoking url")
+  //     URL.revokeObjectURL(previewImageUrl)
+  //   }
+  // }, [])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("files: ", e.target?.files)
+    console.log("files: ", e.target?.files);
     if (e.target.files) {
-      const file = e.target.files[0]
-      setFile(file)
-      const tempUrl = URL.createObjectURL(file)
-      setPreviewImageUrl(tempUrl)
-      console.log("file input ref: ", fileInputRef.current)
-
+      const file = e.target.files[0];
+      setFile(file);
+      const tempUrl = URL.createObjectURL(file);
+      setPreviewImageUrl(tempUrl);
+      console.log("file input ref: ", fileInputRef.current);
     }
-  }
+  };
 
   const computeSHA256 = async (file: File) => {
-    const buffer = await file.arrayBuffer()
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
-    const hashArray = Array.from(new Uint8Array(hashBuffer))
-    const hashHex = hashArray.map((b) => b.toString().padStart(2, "0")).join("")
-    return hashHex
-  }
-
-
+    const buffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString().padStart(2, "0"))
+      .join("");
+    return hashHex;
+  };
 
   const action = async (formData: FormData) => {
-    setSuccess("")
-    setError("")
+    setSuccess("");
+    setError("");
 
     if (file) {
-      const checksum = await computeSHA256(file)
-      const signedUrlResult = await getSignedURL(file.type, file.size, checksum)
+      const checksum = await computeSHA256(file);
+      const signedUrlResult = await getSignedURL(
+        file.type,
+        file.size,
+        checksum
+      );
       if (signedUrlResult.failure !== undefined) {
-        setError("Failed to retrieve signed url")
-        return
+        setError("Failed to retrieve signed url");
+        return;
       }
-      const url = signedUrlResult.success.url
+      const url = signedUrlResult.success.url;
       await fetch(url, {
         method: "PUT",
         body: file,
         headers: {
-          "Content-Type": file.type
-        }
-      })
+          "Content-Type": file.type,
+        },
+      });
     }
 
-    const { success, failure } = await updateProfileCard(formData)
+    const { success, failure } = await updateProfileCard(formData);
     if (failure) {
-      setError(failure)
+      setError(failure);
     } else {
-      setSuccess(success)
+      setSuccess(success);
     }
-
-  }
-
-
+  };
 
   const handleRemoveFile = () => {
-    setFile(null)
-    URL.revokeObjectURL(previewImageUrl)
-    setPreviewImageUrl("")
+    setFile(null);
+    URL.revokeObjectURL(previewImageUrl);
+    setPreviewImageUrl("");
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-
+      fileInputRef.current.value = "";
     }
-    console.log("removing file, file input ref: ", fileInputRef.current)
-  }
+    console.log("removing file, file input ref: ", fileInputRef.current);
+  };
 
-
-  if (!pathname.includes("/admin")) return null
+  if (!pathname.includes("/admin")) return null;
 
   return (
-
     <Dialog open={isEditing} onOpenChange={setIsEditing}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsEditing(true)} variant='outline' className="absolute top-2 right-2 flex items-center gap-x-1">
+        <Button
+          onClick={() => setIsEditing(true)}
+          variant="outline"
+          className="absolute top-2 right-2 flex items-center gap-x-1"
+        >
           <PencilIcon size={15} />
           <span>Edit</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
-
         <Form {...form}>
           <form className="space-y-6" action={action}>
             <div className="flex items-center gap-x-2">
-              <ProfileImage imageUrl={previewImageUrl ? previewImageUrl : imageUrl} />
-              <input onChange={handleFileChange} ref={fileInputRef} hidden type="file" accept=".jpg, .jpeg, .png" />
-              <Button type="button" onClick={() => fileInputRef?.current?.click()} variant="outline">
+              <ProfileImage
+                imageUrl={previewImageUrl ? previewImageUrl : imageUrl}
+              />
+              <input
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                hidden
+                type="file"
+                accept=".jpg, .jpeg, .png"
+              />
+              <Button
+                type="button"
+                onClick={() => fileInputRef?.current?.click()}
+                variant="outline"
+              >
                 Upload Image
               </Button>
               {file && (
-                <Button onClick={() => handleRemoveFile()} type="button" variant="outline">
+                <Button
+                  onClick={() => handleRemoveFile()}
+                  type="button"
+                  variant="outline"
+                >
                   Remove
                 </Button>
               )}
             </div>
 
-            <FormField name="name" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <FormField name="bio" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bio</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              name="bio"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bio</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <DialogFooter>
               <SubmitButton2>Submit</SubmitButton2>
             </DialogFooter>
-
           </form>
-
-
         </Form>
       </DialogContent>
-
     </Dialog>
   );
 }
-
-

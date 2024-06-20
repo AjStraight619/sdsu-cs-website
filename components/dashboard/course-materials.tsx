@@ -1,18 +1,25 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
+import MainViewer from "./main-viewer";
+import { Prisma } from "@prisma/client";
+import { getCourseMaterials } from "@/server-only/course";
 
-export default async function CourseMaterials() {
-  // will do a promise.all to fetch the home, syllabus, and modules here..
+type CourseMaterialsProps = {
+  course: string;
+};
+
+export default async function CourseMaterials({
+  course,
+}: CourseMaterialsProps) {
   const session = await auth();
   if (!session || !session.user) {
     redirect("/admin/login");
   }
-  const syllabus = await db.syllabus.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
 
-  return <div></div>;
+  const courseData = await getCourseMaterials(course);
+
+  console.log(JSON.stringify(courseData, null, 2));
+
+  return <MainViewer courseData={courseData} />;
 }

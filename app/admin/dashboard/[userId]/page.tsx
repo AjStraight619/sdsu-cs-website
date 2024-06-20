@@ -7,8 +7,8 @@ import ProfessorCardLoading from "@/components/loading/professor-card-loading";
 import CourseActionsLoading from "@/components/loading/course-actions-loading";
 import CourseMaterialsProvider from "@/context/course-materials-context";
 import CourseHeader from "@/components/dashboard/course-header";
-import CourseSelection from "@/components/common/course-selection";
 import CourseMaterialsSelection from "@/components/dashboard/course-materials-selection";
+import CourseMaterials from "@/components/dashboard/course-materials";
 
 type AdminDashboardProps = {
   params: {
@@ -23,27 +23,13 @@ export default async function AdminDashboard({
   params: { userId },
   searchParams: { course },
 }: AdminDashboardProps) {
-  console.log("userId: ", userId);
-
-  // const courseInfoComponent = currentCourseId ? (
-  //   <Suspense fallback={<div>Loading...</div>}>
-  //     <CourseInfo currentCourseId={currentCourseId} courses={courses} />
-  //   </Suspense>
-  // ) : (
-  //   <div>No course selected</div>
-  // );
-
-  // if (!user) {
-  //   redirect("/admin/register")
-  // }
-
   const getCourseTitle = (course: string): string => {
     const parts = course?.split("-");
     return parts?.join(" ");
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-12 space-y-12 pt-32 container">
+    <div className="min-h-screen flex flex-col p-12 space-y-12 pt-32 container overflow-auto">
       <section className="flex sm:flex-row items-center sm:items-start sm:justify-between flex-col justify-center gap-x-2 w-full">
         <Suspense fallback={<ProfessorCardLoading />}>
           <ProfessorCard />
@@ -53,10 +39,13 @@ export default async function AdminDashboard({
         </Suspense>
       </section>
       <SectionDivider />
-      <CourseHeader>{getCourseTitle(course)}</CourseHeader>
-      <CourseMaterialsProvider>
-        <CourseMaterialsSelection />
-      </CourseMaterialsProvider>
+      <section className="space-y-6">
+        <CourseHeader>{getCourseTitle(course)}</CourseHeader>
+        <CourseMaterialsProvider>
+          <CourseMaterialsSelection />
+          <CourseMaterials course={course} />
+        </CourseMaterialsProvider>
+      </section>
     </div>
   );
 }

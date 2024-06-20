@@ -1,22 +1,17 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import ProfileImage from "./profile-image"
-import EditableProfessorCard from "../dashboard/editable-professor-card"
-import { auth } from "@/auth"
-import { db } from "@/lib/db"
-import { redirect } from "next/navigation"
-import { wait } from "@/lib/utils"
-
-
-
-
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import ProfileImage from "./profile-image";
+import EditableProfessorCard from "../dashboard/editable-professor-card";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import { wait } from "@/lib/utils";
 
 export default async function ProfessorCard() {
-
-  const session = await auth()
+  const session = await auth();
   if (!session || !session.user) {
-    redirect("/login")
+    redirect("/admin/login");
   }
-  const userId = session.user.id
+  const userId = session.user.id;
 
   const user = await db.user.findUnique({
     where: {
@@ -28,29 +23,23 @@ export default async function ProfessorCard() {
   });
 
   if (!user) {
-    redirect("/register")
+    redirect("/admin/register");
   }
 
-
-
   return (
-
     <Card className="w-full sm:w-1/2 relative">
-      <EditableProfessorCard imageUrl={user.image ?? '/base_profile_picture.jpg'} name={user.name} bio={user.bio} />
+      <EditableProfessorCard
+        imageUrl={user.image ?? "/base_profile_picture.jpg"}
+        name={user.name}
+        bio={user.bio}
+      />
       <CardHeader>
-        <div className='flex flex-row items-center gap-x-6'>
-          <ProfileImage imageUrl={user.image ?? '/base_profile_picture.jpg'} />
-          <p className='font-semibold text-2xl'>
-            {user.name}
-          </p>
+        <div className="flex flex-row items-center gap-x-6">
+          <ProfileImage imageUrl={user.image ?? "/base_profile_picture.jpg"} />
+          <p className="font-semibold text-2xl">{user.name}</p>
         </div>
-        <CardDescription>
-          {user.bio}
-        </CardDescription>
+        <CardDescription>{user.bio}</CardDescription>
       </CardHeader>
     </Card>
-
-
-
-  )
+  );
 }

@@ -164,12 +164,12 @@ export default function CourseActions({
     if (addCourseError) {
       toast.error("Something went wrong", {
         description: addCourseError,
-        duration: 2000,
+        duration: 4000,
       });
     } else if (courseName) {
       toast("Created course", {
         description: `New course: ${courseName}`,
-        duration: 2000,
+        duration: 4000,
       });
     }
     setInput("");
@@ -199,7 +199,7 @@ export default function CourseActions({
   );
 
   return (
-    <Card className="w-full sm:w-1/2 relative self-start">
+    <Card className="w-full sm:w-1/2 relative self-start h-full">
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -237,62 +237,65 @@ export default function CourseActions({
         <CardDescription>Manage your courses</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col">
-          {/* <Select onValueChange={(value) => handlePathChange(value)}> */}
-          {/*   <SelectTrigger className="w-[180px]"> */}
-          {/*     <SelectValue placeholder={optimisticCourses?.at(0)?.title ?? "No courses"} /> */}
-          {/*   </SelectTrigger> */}
-          {/*   <SelectContent> */}
-          {/*     {optimisticCourses?.map((course) => ( */}
-          {/*       <SelectItem value={course.title} key={course.id}> */}
-          {/*         {course.title} */}
-          {/*       </SelectItem> */}
-          {/*     ))} */}
-          {/*   </SelectContent> */}
+        {/* <Select onValueChange={(value) => handlePathChange(value)}> */}
+        {/*   <SelectTrigger className="w-[180px]"> */}
+        {/*     <SelectValue placeholder={optimisticCourses?.at(0)?.title ?? "No courses"} /> */}
+        {/*   </SelectTrigger> */}
+        {/*   <SelectContent> */}
+        {/*     {optimisticCourses?.map((course) => ( */}
+        {/*       <SelectItem value={course.title} key={course.id}> */}
+        {/*         {course.title} */}
+        {/*       </SelectItem> */}
+        {/*     ))} */}
+        {/*   </SelectContent> */}
 
-          {/*    </Select> */}
-          <motion.ul
-            className="grid grid-cols-2 gap-2"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {optimisticCourses?.map((course) => (
-              <motion.li
-                key={course.id}
-                onClick={() => handlePathChange(course.title)}
-                className={`${
-                  course.pending
-                    ? "text-muted-foreground "
-                    : "text-black hover:cursor-pointer"
-                } ${
-                  currentCourse === course.title ? "bg-muted py-1" : "py-2"
-                } px-2 rounded-md transition-colors duration-300 relative w-full hover:bg-muted`}
-                variants={course.pending ? {} : itemVariants}
-                initial={course.pending ? false : "hidden"}
-                animate={course.pending ? false : "visible"}
-              >
-                <div className="h-full flex items-center justify-between">
-                  <span
-                    className={`${
-                      currentCourse === course.title
-                        ? "underline text-bright-red"
-                        : ""
-                    }`}
-                  >
-                    {course.title}
-                  </span>
-                  {currentCourse === course.title && (
-                    <DeleteCourse
-                      courseId={course.id}
-                      handleDeleteCourse={handleDeleteCourse}
-                    />
-                  )}
-                </div>
-              </motion.li>
-            ))}
-          </motion.ul>
-        </div>
+        {/*    </Select> */}
+        {optimisticCourses?.length === 0 && (
+          <div className="text-lg text-muted-foreground pt-4">
+            Start by adding courses.
+          </div>
+        )}
+        <motion.ul
+          className="grid grid-cols-2 gap-2 pt-3"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {optimisticCourses?.map((course) => (
+            <motion.li
+              key={course.id}
+              onClick={() => handlePathChange(course.title)}
+              className={`${
+                course.pending
+                  ? "text-muted-foreground "
+                  : "text-black hover:cursor-pointer"
+              } ${
+                currentCourse === course.title ? "bg-muted py-1" : "py-2"
+              } px-2 rounded-md transition-colors duration-300 relative w-full hover:bg-muted`}
+              variants={course.pending ? {} : itemVariants}
+              initial={course.pending ? false : "hidden"}
+              animate={course.pending ? false : "visible"}
+            >
+              <div className="h-full flex items-center justify-between">
+                <span
+                  className={`${
+                    currentCourse === course.title
+                      ? "underline text-bright-red"
+                      : ""
+                  }`}
+                >
+                  {course.title}
+                </span>
+                {currentCourse === course.title && (
+                  <DeleteCourse
+                    courseId={course.id}
+                    handleDeleteCourse={handleDeleteCourse}
+                  />
+                )}
+              </div>
+            </motion.li>
+          ))}
+        </motion.ul>
       </CardContent>
     </Card>
   );
