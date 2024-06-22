@@ -1,15 +1,28 @@
-import { auth } from '@/auth'
-import { db } from '@/lib/db'
-import ClassList from '../components/homepage/ClassList'
-import '../components/homepage/homepage.css'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import ClassList from "../components/homepage/ClassList";
+import "../components/homepage/homepage.css";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 export default async function HomePage() {
   // const user = await db.user.findUnique({
   // 	where: {
   // 		email: "test@user.com"
   // 	}
   // })
-  const session = await auth()
+  const session = await auth();
+  const professors = await db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  console.log("Professors: ", professors);
 
   return (
     <div className="min-h-screen items-center justify-center flex flex-col">
@@ -34,11 +47,11 @@ export default async function HomePage() {
 
       <Card className="px-10 py-10">
         <CardContent>
-          <ClassList />
+          <ClassList professors={professors} />
         </CardContent>
       </Card>
 
       <pre>{JSON.stringify(session, null, 2)}</pre>
     </div>
-  )
+  );
 }

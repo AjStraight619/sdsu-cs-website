@@ -36,10 +36,10 @@ export const wait = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const getS3FileURL = (type: string, userId: string): string => {
+export const getS3FileURL = (key: string, userId: string): string => {
   const bucketName = process.env.AWS_BUCKET_NAME;
   const region = process.env.AWS_BUCKET_REGION;
-  const objectKey = `${type}-${userId}`;
+  const objectKey = `${key}-${userId}`;
   const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${objectKey}`;
   return fileUrl;
 };

@@ -29,6 +29,7 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 
 import { PencilIcon } from "lucide-react";
+import { ErrorMessage, SuccessMessage } from "../ui/form-messages";
 
 type EditableProfessorCardProps = {
   imageUrl: string;
@@ -96,11 +97,13 @@ export default function EditableProfessorCard({
     setError("");
 
     if (file) {
+      console.log("file: ", file);
       const checksum = await computeSHA256(file);
       const signedUrlResult = await getSignedURL(
         file.type,
         file.size,
-        checksum
+        checksum,
+        "profile-image"
       );
       if (signedUrlResult.failure !== undefined) {
         setError("Failed to retrieve signed url");
@@ -120,6 +123,7 @@ export default function EditableProfessorCard({
     if (failure) {
       setError(failure);
     } else {
+      console.log("success...");
       setSuccess(success);
     }
   };
@@ -162,22 +166,29 @@ export default function EditableProfessorCard({
                 type="file"
                 accept=".jpg, .jpeg, .png"
               />
-              <Button
-                type="button"
-                onClick={() => fileInputRef?.current?.click()}
-                variant="outline"
-              >
-                Upload Image
-              </Button>
-              {file && (
-                <Button
-                  onClick={() => handleRemoveFile()}
-                  type="button"
-                  variant="outline"
-                >
-                  Remove
-                </Button>
-              )}
+
+              <div className="flex flex-col gap-y-2">
+                <div className="flex flex-row items-center gap-x-2">
+                  <Button
+                    type="button"
+                    onClick={() => fileInputRef?.current?.click()}
+                    variant="outline"
+                  >
+                    Upload Image
+                  </Button>
+                  {file && (
+                    <Button
+                      onClick={() => handleRemoveFile()}
+                      type="button"
+                      variant="outline"
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+                {success && <SuccessMessage message={success} />}
+                {error && <ErrorMessage message={error} />}
+              </div>
             </div>
 
             <FormField

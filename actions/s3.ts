@@ -16,16 +16,9 @@ export async function getSignedURL(
   type: string,
   size: number,
   checksum: string,
-  key?: string
+  key: string
 ) {
   // TODO: Implement auth and return a failure object if admin is not signed in.
-  let location = "";
-
-  if (key === "profile-image") {
-    location = "profile-image";
-  } else if (key === "syllabus") {
-    location = "syllabus";
-  }
 
   const session = await auth();
   if (!session || !session.user) {
@@ -39,7 +32,7 @@ export async function getSignedURL(
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: `${location}-${session.user.id}`,
+    Key: `${key}-${session.user.id}`,
     // ContentType: type,
     // ContentLength: size,
     // ChecksumSHA256: checksum
