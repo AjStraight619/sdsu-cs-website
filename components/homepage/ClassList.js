@@ -1,19 +1,17 @@
 import React from 'react'
 
 const classes = [
-  { name: 'CS150 : Introductory Computer Programming', link: '/cs150' },
-  { name: 'CS210 : Data Structures', link: '/ds' },
-  { name: 'CS460 : Algorithms', link: '/algorithms' },
-  {
-    name: 'CS250 : Introduction to Software Systems',
-    link: '/cs250',
-  },
+  { name: 'Prof.A', link: '/profA' },
+  { name: 'Prof.B', link: '/profB' },
+  { name: 'Prof.C', link: '/profC' },
 ]
 
 const ClassList = () => {
   return (
     <div className="classList">
-      <h2 className="capitalize font-poppins pb-5">Participating Classes</h2>
+      <h2 className="capitalize font-poppins pb-5">
+        Participating Professors...
+      </h2>
 
       <ul className="capitalize">
         {classes.map((classItem, index) => (
