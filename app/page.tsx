@@ -22,9 +22,9 @@ export default async function HomePage() {
           Welcome Students!
         </h2>
         <p className="text-center px-20 py-1">
-          Welcome to the Computer Science Repository! This repository is
-          designed to provide you with all the resources and information you
-          need for your Computer Science courses at SDSU.
+          This is the SDSU Computer Science Repository! It is designed to
+          provide you with all the resources and information you need for your
+          Computer Science courses at SDSU.
         </p>
         <p className="text-center px-20 py-1">
           Explore the classes below to access syllabi, lecture notes,
