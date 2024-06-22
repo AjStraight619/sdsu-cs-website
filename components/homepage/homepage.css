@@ -1,0 +1,44 @@
+.home {
+  text-align: center;
+}
+
+.welcome-section {
+  margin: 30px;
+  text-align: left;
+}
+
+.welcome-section h2 {
+  margin: 20px;
+  color: #282c34;
+}
+
+.welcome-section p {
+  color: #333;
+  line-height: 1.6;
+}
+
+.classList {
+  text-align: left;
+}
+
+.classList h2 {
+  color: #282c34;
+}
+
+.classList ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.classList li {
+  margin: 10px 0;
+}
+
+.classList a {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.classList a:hover {
+  text-decoration: underline;
+}

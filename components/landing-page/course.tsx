@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type CoursesProps = {
-  profName: string;
-  courses: string[];
-};
+  profName: string
+  courses: string[]
+}
 
 export default function Course({ profName, courses }: CoursesProps) {
   return (
@@ -19,5 +19,5 @@ export default function Course({ profName, courses }: CoursesProps) {
         </ul>
       </CardContent>
     </Card>
-  );
+  )
 }
