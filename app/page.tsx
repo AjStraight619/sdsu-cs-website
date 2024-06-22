@@ -13,20 +13,20 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen items-center justify-center flex flex-col">
-      <h1 className="capitalize font-poppins text-3xl pt-10">
+      <h1 className="capitalize font-poppins text-3xl pt-12">
         CS Course Repository
       </h1>
 
       <section className="welcome-section">
-        <h2 className="capitalize font-poppins text-center pb-5">
+        <h2 className="capitalize font-poppins text-center">
           Welcome Students!
         </h2>
-        <p>
+        <p className="text-center px-20 py-1">
           Welcome to the Computer Science Repository! This repository is
           designed to provide you with all the resources and information you
           need for your Computer Science courses at SDSU.
         </p>
-        <p>
+        <p className="text-center px-20 py-1">
           Explore the classes below to access syllabi, lecture notes,
           assignments, and more. Happy learning!
         </p>

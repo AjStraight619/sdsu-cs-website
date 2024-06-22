@@ -12,7 +12,7 @@ const classes = [
 
 const ClassList = () => {
   return (
-    <div className="class-list">
+    <div className="classList">
       <h2 className="capitalize font-poppins pb-5">Participating Classes</h2>
 
       <ul className="capitalize">
