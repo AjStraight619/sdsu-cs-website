@@ -39,8 +39,8 @@ export async function addSyllabus(data: FormData) {
         data: {
           professorId: session.user.id,
           courseId: courseId,
-          title: title,
-          description: description,
+          title: title ?? "",
+          description: description ?? "",
           url: fileUrl,
         },
       });
@@ -62,6 +62,6 @@ export async function addSyllabus(data: FormData) {
     console.error("Error adding syllabus:", error);
     return { failure: "Error adding syllabus" };
   } finally {
-    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/dashboard/[userId]", "page");
   }
 }

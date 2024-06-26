@@ -8,25 +8,20 @@ import { useMaterial } from "@/context/course-materials-context";
 
 const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);
-  const { selectedMaterial, files, setFiles } = useMaterial();
+  const { selectedMaterial, file, setFile } = useMaterial();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
+      const newFile = acceptedFiles[0];
+      if (!newFile) return;
 
       const reader = new FileReader();
 
-      // Set up the event handlers
       reader.onprogress = (event) => {
         if (event.lengthComputable) {
           const percentComplete = (event.loaded / event.total) * 100;
           console.log(percentComplete);
           setProgress(percentComplete);
-          // toast.loading(
-          //   <Progress className="z-[999]" value={percentComplete} />,
-          //   { id: "upload-progress" }
-          // );
         }
       };
 
@@ -38,7 +33,7 @@ const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
         });
         setProgress(100); // Ensure it shows 100% on completion
         setTimeout(() => setProgress(0), 2000); // Reset progress after 2 seconds
-        setFiles([...files, file]);
+        setFile(newFile);
       };
 
       reader.onerror = () => {
@@ -49,13 +44,13 @@ const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
         setProgress(0);
       };
 
-      reader.readAsArrayBuffer(file);
+      reader.readAsArrayBuffer(newFile);
 
       return () => {
         reader.abort();
       };
     },
-    [files, setFiles]
+    [setFile]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -64,15 +59,16 @@ const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
       "application/pdf": [".pdf"],
       "image/*": [".jpeg", ".jpg", ".png"],
     },
+    multiple: false, // Ensure only one file is accepted
   });
 
   return (
     <div {...getRootProps()} className="border-2 border-dashed p-4">
       <input {...getInputProps()} />
       {isDragActive ? (
-        <p>Drop the files here ...</p>
+        <p>Drop the file here ...</p>
       ) : (
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag 'n' drop a file here, or click to select a file</p>
       )}
       {children}
       {/* <Progress value={progress} /> */}

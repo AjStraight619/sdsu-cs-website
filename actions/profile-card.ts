@@ -22,11 +22,6 @@ export async function updateProfileCard(data: FormData) {
   const fileUrl = getS3FileURL("profile-image", session.user.id);
   console.log("fileUrl: ", fileUrl);
 
-  // const bucketName = process.env.AWS_BUCKET_NAME;
-  // const region = process.env.AWS_BUCKET_REGION;
-  // const objectKey = `profile-image-${session.user.id}`;
-  // const imageUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${objectKey}`;
-
   try {
     await db.user.update({
       where: {

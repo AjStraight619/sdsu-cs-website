@@ -7,9 +7,9 @@ import { Separator } from "../ui/separator";
 const materialOptions: Material[] = ["Home", "Syllabus", "Modules"];
 
 export default function CourseMaterialsSelection() {
-  const { setSelectedMaterial, selectedMaterial, setFiles } = useMaterial();
+  const { setSelectedMaterial, selectedMaterial, setFile } = useMaterial();
   const handleSelectionChange = (option: Material) => {
-    setFiles([]);
+    setFile(null);
     setSelectedMaterial(option);
   };
 

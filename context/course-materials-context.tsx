@@ -6,8 +6,8 @@ export type Material = "Home" | "Syllabus" | "Modules" | null;
 type CourseMaterialsContextType = {
   selectedMaterial: Material;
   setSelectedMaterial: (material: Material) => void;
-  files: File[];
-  setFiles: (files: File[]) => void;
+  file: File | null;
+  setFile: (file: File | null) => void;
 };
 
 const CourseMaterialsContext = createContext<CourseMaterialsContextType | null>(
@@ -20,15 +20,15 @@ export default function CourseMaterialsProvider({
   children: ReactNode;
 }) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material>(null);
-  const [files, setFiles] = useState<File[]>([]);
+  const [file, setFile] = useState<File | null>(null);
 
   return (
     <CourseMaterialsContext.Provider
       value={{
         selectedMaterial,
         setSelectedMaterial,
-        files,
-        setFiles,
+        file,
+        setFile,
       }}
     >
       {children}

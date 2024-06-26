@@ -100,9 +100,9 @@ export default function EditableProfessorCard({
       console.log("file: ", file);
       const checksum = await computeSHA256(file);
       const signedUrlResult = await getSignedURL(
-        file.type,
+        // file.type,
         file.size,
-        checksum,
+        // checksum,
         "profile-image"
       );
       if (signedUrlResult.failure !== undefined) {

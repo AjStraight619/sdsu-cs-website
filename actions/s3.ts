@@ -13,9 +13,9 @@ const s3 = new S3Client({
 });
 const MAX_FILE_SIZE = 1024 * 1024 * 10;
 export async function getSignedURL(
-  type: string,
+  // type: string,
   size: number,
-  checksum: string,
+  // checksum: string,
   key: string
 ) {
   // TODO: Implement auth and return a failure object if admin is not signed in.
