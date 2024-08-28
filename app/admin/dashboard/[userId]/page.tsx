@@ -40,7 +40,13 @@ export default async function AdminDashboard({
       </section>
       <SectionDivider />
       <section className="space-y-6">
-        <CourseHeader>{getCourseTitle(course)}</CourseHeader>
+        <CourseHeader>
+          {getCourseTitle(course) ?? (
+            <div>
+              Select or create a course in your course manager to continue.
+            </div>
+          )}
+        </CourseHeader>
         <CourseMaterialsProvider>
           <CourseMaterialsSelection />
           <CourseMaterials course={course} />

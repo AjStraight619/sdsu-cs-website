@@ -4,13 +4,10 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export default async function Login() {
-  const session = await auth()
+  const session = await auth();
   if (session && session.user) {
-    redirect(`/admin/dashboard/${session.user.id}`)
+    redirect(`/admin/dashboard/${session.user.id}`);
   }
 
-  console.log("session: ", session)
-  return (
-    <LoginForm />
-  )
+  return <LoginForm />;
 }

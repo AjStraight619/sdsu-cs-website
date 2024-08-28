@@ -105,11 +105,15 @@ export default function EditableProfessorCard({
         // checksum,
         "profile-image"
       );
-      if (signedUrlResult.failure !== undefined) {
+      if (signedUrlResult?.failure !== undefined) {
         setError("Failed to retrieve signed url");
         return;
       }
-      const url = signedUrlResult.success.url;
+      const url = signedUrlResult?.success.url;
+      if (!url) {
+        setError("Something went wrong");
+        return;
+      }
       await fetch(url, {
         method: "PUT",
         body: file,

@@ -1,7 +1,33 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["unused-imports", "import"],
   "rules": {
     "react/no-unescaped-entities": "off",
-    "@next/next/no-page-custom-font": "off"
-  }
+    "@next/next/no-page-custom-font": "off",
+    "no-unused-vars": "warn",
+    "unused-imports/no-unused-imports-ts": "warn",
+    "unused-imports/no-unused-vars-ts": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ],
+    "import/no-unresolved": "error",
+    "import/named": "error",
+    "import/default": "error",
+    "import/namespace": "error",
+    "import/no-absolute-path": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "rules": {
+        "unused-imports/no-unused-imports-ts": "off",
+        "no-unused-vars": "off"
+      }
+    }
+  ]
 }

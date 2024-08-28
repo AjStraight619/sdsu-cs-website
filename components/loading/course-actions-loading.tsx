@@ -15,9 +15,8 @@ export default function CourseActionsLoading() {
         <CardTitle>
           <Skeleton className="h-10 w-1/5 rounded-md" />
         </CardTitle>
-        <CardDescription>
-          <Skeleton className="h-2 w-1/5" />
-        </CardDescription>
+
+        <Skeleton className="h-2 w-1/5" />
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 w-full gap-x-2">

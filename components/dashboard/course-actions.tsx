@@ -237,19 +237,6 @@ export default function CourseActions({
         <CardDescription>Manage your courses</CardDescription>
       </CardHeader>
       <CardContent>
-        {/* <Select onValueChange={(value) => handlePathChange(value)}> */}
-        {/*   <SelectTrigger className="w-[180px]"> */}
-        {/*     <SelectValue placeholder={optimisticCourses?.at(0)?.title ?? "No courses"} /> */}
-        {/*   </SelectTrigger> */}
-        {/*   <SelectContent> */}
-        {/*     {optimisticCourses?.map((course) => ( */}
-        {/*       <SelectItem value={course.title} key={course.id}> */}
-        {/*         {course.title} */}
-        {/*       </SelectItem> */}
-        {/*     ))} */}
-        {/*   </SelectContent> */}
-
-        {/*    </Select> */}
         {optimisticCourses?.length === 0 && (
           <div className="text-lg text-muted-foreground pt-4">
             Start by adding courses.

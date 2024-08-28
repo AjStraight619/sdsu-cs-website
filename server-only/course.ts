@@ -16,7 +16,8 @@ export async function getCourseMaterials(course: string) {
         title: course,
       },
       include: {
-        syllabi: true,
+        syllabus: true,
+        modules: true,
       },
     });
 

@@ -16,9 +16,13 @@ export async function getSignedURL(
   // type: string,
   size: number,
   // checksum: string,
-  key: string
+  key: string | undefined
 ) {
   // TODO: Implement auth and return a failure object if admin is not signed in.
+
+  if (!key) {
+    return;
+  }
 
   const session = await auth();
   if (!session || !session.user) {

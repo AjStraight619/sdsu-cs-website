@@ -59,19 +59,14 @@ const DragAndDropWrapper = ({ children }: { children: ReactNode }) => {
       "application/pdf": [".pdf"],
       "image/*": [".jpeg", ".jpg", ".png"],
     },
-    multiple: false, // Ensure only one file is accepted
+    multiple: false,
   });
 
   return (
     <div {...getRootProps()} className="border-2 border-dashed p-4">
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p>Drop the file here ...</p>
-      ) : (
-        <p>Drag 'n' drop a file here, or click to select a file</p>
-      )}
+      <input className="z-[999]" {...getInputProps()} />
+      {isDragActive && <p className="animate-pulse">Drop the file here ...</p>}
       {children}
-      {/* <Progress value={progress} /> */}
     </div>
   );
 };

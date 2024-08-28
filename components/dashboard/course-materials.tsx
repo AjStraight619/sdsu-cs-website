@@ -1,8 +1,6 @@
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import MainViewer from "./main-viewer";
-import { Prisma } from "@prisma/client";
 import { getCourseMaterials } from "@/server-only/course";
 
 type CourseMaterialsProps = {
@@ -17,9 +15,9 @@ export default async function CourseMaterials({
     redirect("/admin/login");
   }
 
-  const courseData = await getCourseMaterials(course);
+  if (!course) return null;
 
-  console.log(JSON.stringify(courseData, null, 2));
+  const courseData = await getCourseMaterials(course);
 
   return <MainViewer courseData={courseData} />;
 }

@@ -8,12 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+
 export default async function HomePage() {
-  // const user = await db.user.findUnique({
-  // 	where: {
-  // 		email: "test@user.com"
-  // 	}
-  // })
   const session = await auth();
   const professors = await db.user.findMany({
     select: {
@@ -21,8 +17,6 @@ export default async function HomePage() {
       name: true,
     },
   });
-
-  console.log("Professors: ", professors);
 
   return (
     <div className="min-h-screen items-center justify-center flex flex-col">
@@ -51,7 +45,7 @@ export default async function HomePage() {
         </CardContent>
       </Card>
 
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
     </div>
   );
 }

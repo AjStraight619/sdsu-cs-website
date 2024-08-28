@@ -19,7 +19,7 @@ export default function CourseMaterialsProvider({
 }: {
   children: ReactNode;
 }) {
-  const [selectedMaterial, setSelectedMaterial] = useState<Material>(null);
+  const [selectedMaterial, setSelectedMaterial] = useState<Material>("Home");
   const [file, setFile] = useState<File | null>(null);
 
   return (

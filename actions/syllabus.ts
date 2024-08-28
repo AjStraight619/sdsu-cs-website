@@ -15,11 +15,11 @@ export async function addSyllabus(data: FormData) {
   const title = (formData.title as string) || null;
   const description = (formData.description as string) || null;
   const courseTitle = formData.courseTitle as string;
+  console.log("course title: ", courseTitle);
 
   const professorId = session.user.id;
 
   try {
-    // Find the courseId using professorId and the unique course title
     const course = await db.course.findFirst({
       where: {
         professorId: professorId,
@@ -34,34 +34,44 @@ export async function addSyllabus(data: FormData) {
     const courseId = course.id;
     const fileUrl = getS3FileURL("syllabus", session.user.id);
 
-    const result = await db.$transaction(async (prisma) => {
-      const newSyllabus = await prisma.syllabus.create({
+    const existingSyllabus = await db.syllabus.findUnique({
+      where: {
+        courseId: courseId,
+      },
+    });
+
+    let result;
+    if (existingSyllabus) {
+      result = await db.syllabus.update({
+        where: {
+          id: existingSyllabus.id,
+        },
         data: {
-          professorId: session.user.id,
+          title: title ?? "",
+          description: description ?? "",
+          url: fileUrl,
+        },
+      });
+    } else {
+      result = await db.syllabus.create({
+        data: {
           courseId: courseId,
           title: title ?? "",
           description: description ?? "",
           url: fileUrl,
         },
       });
+    }
 
-      await prisma.course.update({
-        where: { id: courseId },
-        data: {
-          syllabi: {
-            connect: { id: newSyllabus.id },
-          },
-        },
-      });
+    console.log("result: ", result);
 
-      return newSyllabus;
-    });
-
-    return result;
+    return {
+      success: "Upload successful!",
+    };
   } catch (error) {
     console.error("Error adding syllabus:", error);
     return { failure: "Error adding syllabus" };
   } finally {
-    revalidatePath("/admin/dashboard/[userId]", "page");
+    revalidatePath(`/admin/dashboard/[userId]`, "page");
   }
 }

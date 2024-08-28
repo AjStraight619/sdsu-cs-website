@@ -16,7 +16,6 @@ model User {
   image             String?
   bio               String?
   courses           Course[]
-  syllabi           Syllabus[]
   verificationToken VerificationToken?
   accounts          Account[]
   sessions          Session[]
@@ -62,28 +61,38 @@ model VerificationToken {
 }
 
 model Course {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   professorId String
-  professor   User       @relation(fields: [professorId], references: [id])
+  professor   User      @relation(fields: [professorId], references: [id])
   title       String
   description String?
   content     String?
-  syllabi     Syllabus[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  syllabus    Syllabus?
+  modules     Module[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
 
-  @@unique([professorId, title])
+  @@unique([professorId, title], map: "Course_professor_title_unique")
 }
 
 model Syllabus {
   id          String   @id @default(cuid())
-  professorId String
-  professor   User     @relation(fields: [professorId], references: [id])
-  courseId    String
-  course      Course   @relation(fields: [courseId], references: [id])
+  courseId    String   @unique
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   title       String?
   description String?
   url         String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now())
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String?
+  description String?
+  url         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
