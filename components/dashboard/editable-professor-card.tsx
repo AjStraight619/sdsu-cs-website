@@ -36,6 +36,7 @@ type EditableProfessorCardProps = {
   name: string | null;
   bio: string | null;
   courses?: string[];
+  isEditable: boolean;
 };
 
 export default function EditableProfessorCard({

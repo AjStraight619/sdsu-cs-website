@@ -33,6 +33,7 @@ import DeleteCourse from "./delete-course";
 type ProfessorOptionsProps = {
   courses: Course[] | undefined;
   currentCourse: string;
+  isEditable: boolean;
 };
 
 type Course = {
@@ -75,6 +76,7 @@ const itemVariants = {
 export default function CourseActions({
   courses,
   currentCourse,
+  isEditable,
 }: ProfessorOptionsProps) {
   const [input, setInput] = useState("");
   const [optimisticCourses, dispatch] = useOptimistic(courses, reducer);
@@ -200,38 +202,41 @@ export default function CourseActions({
 
   return (
     <Card className="w-full sm:w-1/2 relative self-start h-full">
-      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            className="flex items-center gap-x-1 absolute top-2 right-2"
-            variant="outline"
-            onClick={() => setIsPopoverOpen(true)}
-          >
-            <CirclePlusIcon size={17} />
-            <span>Add Course</span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="ml-2">
-          <div className="flex flex-col space-y-2">
-            {error && <ErrorMessage message={error} />}
-            <form className="space-y-4" action={handleAddCourse}>
-              <Label>Course name</Label>
-              <div className="flex items-center gap-x-2">
-                <Input
-                  placeholder="CS-150"
-                  value={input}
-                  onChange={(e) => handleInputChange(e.target.value)}
-                  name="courseName"
-                  type="text"
-                />
-                <SubmitButton2 className="w-1/4" size="sm" variant="outline">
-                  Add
-                </SubmitButton2>
-              </div>
-            </form>
-          </div>
-        </PopoverContent>
-      </Popover>
+      {isEditable && (
+        <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              className="flex items-center gap-x-1 absolute top-2 right-2"
+              variant="outline"
+              onClick={() => setIsPopoverOpen(true)}
+            >
+              <CirclePlusIcon size={17} />
+              <span>Add Course</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="ml-2">
+            <div className="flex flex-col space-y-2">
+              {error && <ErrorMessage message={error} />}
+              <form className="space-y-4" action={handleAddCourse}>
+                <Label>Course name</Label>
+                <div className="flex items-center gap-x-2">
+                  <Input
+                    placeholder="CS-150"
+                    value={input}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                    name="courseName"
+                    type="text"
+                  />
+                  <SubmitButton2 className="w-1/4" size="sm" variant="outline">
+                    Add
+                  </SubmitButton2>
+                </div>
+              </form>
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
+
       <CardHeader>
         <CardTitle>My Courses</CardTitle>
         <CardDescription>Manage your courses</CardDescription>

@@ -4,7 +4,6 @@ import EditableProfessorCard from "../dashboard/editable-professor-card";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { wait } from "@/lib/utils";
 
 export default async function ProfessorCard() {
   const session = await auth();
@@ -32,6 +31,7 @@ export default async function ProfessorCard() {
         imageUrl={user.image ?? "/base_profile_picture.jpg"}
         name={user.name}
         bio={user.bio}
+        isEditable={true}
       />
       <CardHeader>
         <div className="flex flex-row items-center gap-x-6">

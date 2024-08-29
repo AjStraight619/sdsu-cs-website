@@ -8,15 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import Professors from "@/components/landing-page/professors";
 
 export default async function HomePage() {
   const session = await auth();
-  const professors = await db.user.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  });
 
   return (
     <div className="min-h-screen items-center justify-center flex flex-col">
@@ -39,13 +34,12 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <Card className="px-10 py-10">
+      {/* <Card className="px-10 py-10">
         <CardContent>
           <ClassList professors={professors} />
         </CardContent>
-      </Card>
-
-      {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
+      </Card> */}
+      <Professors />
     </div>
   );
 }

@@ -39,7 +39,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, [key, initialValue]);
+  }, [key]);
 
   return [storedValue, setValue] as const;
 }

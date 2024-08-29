@@ -3,14 +3,15 @@ import CourseActions from "./course-actions";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { wait } from "@/lib/utils";
 
 type ProfessorCoursesProps = {
   course: string;
+  isEditable: boolean;
 };
 
 export default async function ProfessorCourses({
   course,
+  isEditable,
 }: ProfessorCoursesProps) {
   // await wait(5000);
   const session = await auth();
@@ -45,5 +46,11 @@ export default async function ProfessorCourses({
     currentCourseId = coursesInfo[currentCourseIdx].id;
   }
 
-  return <CourseActions courses={coursesInfo} currentCourse={course} />;
+  return (
+    <CourseActions
+      isEditable={isEditable}
+      courses={coursesInfo}
+      currentCourse={course}
+    />
+  );
 }

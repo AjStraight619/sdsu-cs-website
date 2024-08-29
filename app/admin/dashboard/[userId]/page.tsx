@@ -35,7 +35,7 @@ export default async function AdminDashboard({
           <ProfessorCard />
         </Suspense>
         <Suspense fallback={<CourseActionsLoading />}>
-          <ProfessorCourses course={course} />
+          <ProfessorCourses isEditable={true} course={course} />
         </Suspense>
       </section>
       <SectionDivider />

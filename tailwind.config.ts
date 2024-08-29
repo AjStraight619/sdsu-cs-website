@@ -1,8 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const { fontFamily } = require("tailwindcss/defaultTheme");
-
-const config: Config = {
+const config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -25,8 +23,8 @@ const config: Config = {
         "bright-red": "#D41736",
         "dark-teal": "#008080",
         "bright-teal": "#00A39D",
-        "white": "#FFFFFF",
-        "charcoal": {
+        white: "#FFFFFF",
+        charcoal: {
           50: "#F7F7F7",
           100: "#F0EFEF",
           200: "#E2DEDE",
@@ -73,11 +71,6 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        inter: ["var(--font-inter)", ...fontFamily.sans],
-        poppins: ["var(--font-poppins)", ...fontFamily.sans],
-      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -92,18 +85,21 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
     },
   },
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
   plugins: [require("tailwindcss-animate")],
-};
+} satisfies Config;
 
 export default config;
-
