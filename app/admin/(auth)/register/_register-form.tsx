@@ -41,6 +41,12 @@ export default function RegisterForm() {
   });
 
   const createUser = async (formData: FormData) => {
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+    if (!validatePassword(password, confirmPassword)) {
+      setError("Passwords do not match");
+      return;
+    }
     const data = await createUserFD(formData);
     console.log("Response data: ", data);
     if (data.error) {
@@ -49,6 +55,11 @@ export default function RegisterForm() {
     } else if (data.user) {
       setSuccess("Email verification sent!");
     }
+  };
+
+  const validatePassword = (password: string, confirmPassword: string) => {
+    if (password !== confirmPassword) return false;
+    return true;
   };
 
   return (
