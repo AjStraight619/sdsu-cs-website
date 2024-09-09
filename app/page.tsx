@@ -30,7 +30,7 @@ export default async function HomePage() {
         </p>
         <p className="text-center px-20 py-1">
           Explore the classes below to access syllabi, lecture notes,
-          assignments, and more. Happy learning!
+          assignments, and more. Happy learning!!
         </p>
       </section>
 
