@@ -14,8 +14,8 @@ export default async function HomePage() {
   const session = await auth();
 
   return (
-    <div className="min-h-screen items-center justify-center flex flex-col">
-      <h1 className="capitalize font-poppins text-3xl pt-12">
+    <div className="min-h-screen items-center justify-center flex flex-col sm:p-24 p-3">
+      <h1 className="capitalize font-poppins text-3xl mt-8">
         CS Course Repository
       </h1>
 
@@ -30,7 +30,7 @@ export default async function HomePage() {
         </p>
         <p className="text-center px-20 py-1">
           Explore the classes below to access syllabi, lecture notes,
-          assignments, and more. Happy learning!!
+          assignments, and more. Happy learning!
         </p>
       </section>
 
