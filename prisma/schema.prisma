@@ -64,7 +64,7 @@ model Course {
   id          String    @id @default(cuid())
   professorId String
   professor   User      @relation(fields: [professorId], references: [id])
-  title       String
+  title       String @unique
   description String?
   content     String?
   syllabus    Syllabus?

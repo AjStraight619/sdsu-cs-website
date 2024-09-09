@@ -4,8 +4,10 @@ import { addSyllabus } from "@/actions/syllabus";
 
 export default function SyllabusContent({
   syllabus,
+  userId,
 }: {
   syllabus: Syllabus | null | undefined;
+  userId: string;
 }) {
   const handleSyllabusSubmit = async (formData: FormData) => {
     return addSyllabus(formData);
@@ -19,6 +21,7 @@ export default function SyllabusContent({
       contentUrls={contentUrls}
       action={handleSyllabusSubmit}
       acceptedFileTypes="application/pdf"
+      userId={userId}
     />
   );
 }

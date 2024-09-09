@@ -1,4 +1,4 @@
-import { fileImageUpload } from "@/actions/files";
+import { fileImageUpload, fileSyllabusUpload } from "@/actions/files";
 import { getSession } from "next-auth/react";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
@@ -50,23 +50,44 @@ export const ourFileRouter = {
       return { uploadedBy: metadata.userId };
     }),
 
-  fileUploader: f({ image: { maxFileSize: "4MB" } })
+  syllabusUploader: f(["application/pdf"])
+    .input(
+      z.object({
+        userId: z.string(),
+        course: z.string(),
+      })
+    )
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async ({ req, input }) => {
       // This code runs on your server before upload
-      const user = await auth(req);
+      console.log("Req: ", req);
 
-      // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+      //   const session = await getSession();
+
+      //   //   if (!session) throw new UploadThingError("Unauthorized");
+
+      //   const user = session?.user;
+
+      const userId = input.userId;
+      const course = input.course;
+
+      //   // If you throw, the user will not be able to upload
+      //   if (!user) throw new UploadThingError("Unauthorized");
+
+      //   console.log("User id: ", user.id);
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id };
+      return { userId, course };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
 
+      const { userId, course } = metadata;
+
       console.log("file url", file.url);
+
+      await fileSyllabusUpload(userId, course, file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };

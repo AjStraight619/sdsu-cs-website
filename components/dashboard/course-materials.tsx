@@ -15,9 +15,11 @@ export default async function CourseMaterials({
     redirect("/admin/login");
   }
 
+  const userId = session?.user?.id;
+
   if (!course) return null;
 
   const courseData = await getCourseMaterials(course);
 
-  return <MainViewer courseData={courseData} />;
+  return <MainViewer courseData={courseData} userId={userId} />;
 }

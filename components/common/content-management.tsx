@@ -17,6 +17,7 @@ import { getSignedURL } from "@/actions/s3";
 import { ErrorMessage, SuccessMessage } from "../ui/form-messages";
 import DragAndDropWrapper from "../dashboard/drag-and-drop-wrapper";
 import { useSearchParams } from "next/navigation";
+import { useUploadThing } from "@/lib/uploadthing";
 
 type ContentProps = {
   title: string;
@@ -24,6 +25,7 @@ type ContentProps = {
   contentUrls: string[];
   action: (formData: FormData) => Promise<any>;
   acceptedFileTypes: string;
+  userId: string;
 };
 
 export default function ContentManagement({
@@ -32,85 +34,116 @@ export default function ContentManagement({
   contentUrls,
   action,
   acceptedFileTypes,
+  userId,
 }: ContentProps) {
-  const { file, setFile, selectedMaterial } = useMaterial();
-  const objectUrl = useObjectURL(file || null);
+  const { selectedMaterial } = useMaterial();
+  const [files, setFiles] = useState<File[]>([]);
+  const objectUrl = useObjectURL(files[0] || null);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
-  const course = searchParams.get("course");
+  const course = searchParams.get("course") as unknown as string;
+
+  const { startUpload } = useUploadThing("syllabusUploader", {
+    onClientUploadComplete: () => {
+      alert("uploaded successfully!");
+    },
+    onUploadError: () => {
+      alert("error occurred while uploading");
+    },
+    onUploadBegin: () => {
+      alert("upload has begun");
+    },
+  });
 
   const handleRemoveFile = () => {
-    setFile(null);
+    setFiles([]);
   };
 
   const handleUpload = async (formData: FormData) => {
-    formData.append("courseTitle", course as string);
-    setError("");
-    setSuccess("");
-    if (!file) {
-      setError("No file selected");
-      return;
-    }
+    // formData.append("courseTitle", course as string);
+    // setError("");
+    // setSuccess("");
+    // if (!file) {
+    //   setError("No file selected");
+    //   return;
+    // }
+    // const result = await getSignedURL(
+    //   file.size,
+    //   selectedMaterial?.toLowerCase()
+    // );
+    // if (result?.failure) {
+    //   setError("Failed to get signed URL");
+    //   return;
+    // }
+    // if (result?.success?.url) {
+    //   try {
+    //     const url = result.success.url;
+    //     await fetch(url, {
+    //       method: "PUT",
+    //       body: file,
+    //       headers: {
+    //         "Content-Type": file.type,
+    //       },
+    //     });
+    //     const res = await action(formData);
+    //     const { success, failure } = res;
+    //     if (success) {
+    //       setSuccess(success);
+    //     } else {
+    //       setError(failure);
+    //     }
+    //   } catch (err) {
+    //     setError("Something went wrong during the upload");
+    //   }
+    // }
+  };
 
-    const result = await getSignedURL(
-      file.size,
-      selectedMaterial?.toLowerCase()
-    );
-    if (result?.failure) {
-      setError("Failed to get signed URL");
-      return;
-    }
-    if (result?.success?.url) {
-      try {
-        const url = result.success.url;
-        await fetch(url, {
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": file.type,
-          },
-        });
-        const res = await action(formData);
-        const { success, failure } = res;
-        if (success) {
-          setSuccess(success);
-        } else {
-          setError(failure);
-        }
-      } catch (err) {
-        setError("Something went wrong during the upload");
-      }
+  const handleAddNewFile = (files: File[]) => {
+    if (files && files.length > 0) {
+      const file = files[0];
+      setFiles((prevFiles) => [...prevFiles, file]);
     }
   };
 
-  const handleAddNewFile = (files: FileList | null) => {
-    if (files && files.length > 0) {
-      const file = files[0];
-      setFile(file);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("files: ", e.target?.files);
+    if (e.target.files) {
+      const file = e.target.files[0];
+      // setFile(file);
+      const tempUrl = URL.createObjectURL(file);
+      // setPreviewImageUrl(tempUrl);
+      // console.log("file input ref: ", fileInputRef.current);
+      setFiles((prevFiles) => [...prevFiles, file]);
     }
   };
 
   const displayUrls = objectUrl ? [objectUrl] : contentUrls;
 
-  console.log("display urls: ", displayUrls);
-
   return (
     <Card className="relative">
-      {file && (
+      {files.length === 1 && (
         <div className="absolute top-2 right-2 flex items-center gap-x-2">
           <Button onClick={handleRemoveFile} type="button" variant="outline">
             <CircleMinusIcon size={15} className="mr-1" />
             Remove
           </Button>
 
-          <form action={handleUpload}>
+          {/* <form action={handleUpload}>
             <SubmitButton2 variant="outline">
               <UploadIcon size={15} className="mr-1" />
               Upload
             </SubmitButton2>
-          </form>
+          </form> */}
+
+          <Button
+            onClick={() =>
+              startUpload(files, { userId: userId, course: course })
+            }
+          >
+            Upload
+          </Button>
         </div>
       )}
 
@@ -123,7 +156,7 @@ export default function ContentManagement({
           {success && <SuccessMessage message={success} />}
           {error && <ErrorMessage message={error} />}
         </div>
-        {!file && (
+        {files.length === 0 && (
           <>
             <Button
               type="button"
@@ -140,7 +173,7 @@ export default function ContentManagement({
               accept={acceptedFileTypes}
               ref={inputRef}
               multiple={false}
-              onChange={(e) => handleAddNewFile(e.target.files)}
+              onChange={(e) => handleFileChange(e)}
             />
           </>
         )}
