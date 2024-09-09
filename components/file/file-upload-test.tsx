@@ -34,7 +34,7 @@ export function MultiUploader() {
 
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} />
+      {/* <input {...getInputProps()} />
       <div>
         {files.length > 0 && (
           <button onClick={() => startUpload(files)}>
@@ -42,7 +42,7 @@ export function MultiUploader() {
           </button>
         )}
       </div>
-      Drop files here!
+      Drop files here! */}
     </div>
   );
 }

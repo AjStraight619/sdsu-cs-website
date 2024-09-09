@@ -32,6 +32,7 @@ export default async function ProfessorCard() {
         name={user.name}
         bio={user.bio}
         isEditable={true}
+        userId={user.id}
       />
       <CardHeader>
         <div className="flex flex-row items-center gap-x-6">

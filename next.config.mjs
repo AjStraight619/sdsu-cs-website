@@ -14,7 +14,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
-      // Add more remote patterns as needed
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

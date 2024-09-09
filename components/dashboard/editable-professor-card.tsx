@@ -30,6 +30,7 @@ import { Input } from "../ui/input";
 
 import { PencilIcon } from "lucide-react";
 import { ErrorMessage, SuccessMessage } from "../ui/form-messages";
+import { useUploadThing } from "@/lib/uploadthing";
 
 type EditableProfessorCardProps = {
   imageUrl: string;
@@ -37,6 +38,7 @@ type EditableProfessorCardProps = {
   bio: string | null;
   courses?: string[];
   isEditable: boolean;
+  userId: string;
 };
 
 export default function EditableProfessorCard({
@@ -44,15 +46,29 @@ export default function EditableProfessorCard({
   name,
   bio,
   courses,
+  userId,
 }: EditableProfessorCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const pathname = usePathname();
   const [success, setSuccess] = useState<string | undefined>(undefined);
   const [error, setError] = useState("");
   const [previewImageUrl, setPreviewImageUrl] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const renderRef = useRef(0);
+
+  const { startUpload } = useUploadThing("imageUploader", {
+    onClientUploadComplete: () => {
+      alert("uploaded successfully!");
+    },
+    onUploadError: () => {
+      alert("error occurred while uploading");
+    },
+    onUploadBegin: () => {
+      alert("upload has begun");
+    },
+  });
   useEffect(() => {
     console.log("This component re rendered: ", renderRef.current++);
   });
@@ -76,10 +92,11 @@ export default function EditableProfessorCard({
     console.log("files: ", e.target?.files);
     if (e.target.files) {
       const file = e.target.files[0];
-      setFile(file);
+      // setFile(file);
       const tempUrl = URL.createObjectURL(file);
       setPreviewImageUrl(tempUrl);
       console.log("file input ref: ", fileInputRef.current);
+      setFiles((prevFiles) => [...prevFiles, file]);
     }
   };
 
@@ -97,44 +114,44 @@ export default function EditableProfessorCard({
     setSuccess("");
     setError("");
 
-    if (file) {
-      console.log("file: ", file);
-      const checksum = await computeSHA256(file);
-      const signedUrlResult = await getSignedURL(
-        // file.type,
-        file.size,
-        // checksum,
-        "profile-image"
-      );
-      if (signedUrlResult?.failure !== undefined) {
-        setError("Failed to retrieve signed url");
-        return;
-      }
-      const url = signedUrlResult?.success.url;
-      if (!url) {
-        setError("Something went wrong");
-        return;
-      }
-      await fetch(url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
-    }
+    // if (file) {
+    //   console.log("file: ", file);
+    //   const checksum = await computeSHA256(file);
+    //   const signedUrlResult = await getSignedURL(
+    //     // file.type,
+    //     file.size,
+    //     // checksum,
+    //     "profile-image"
+    //   );
+    //   if (signedUrlResult?.failure !== undefined) {
+    //     setError("Failed to retrieve signed url");
+    //     return;
+    //   }
+    //   const url = signedUrlResult?.success.url;
+    //   if (!url) {
+    //     setError("Something went wrong");
+    //     return;
+    //   }
+    //   await fetch(url, {
+    //     method: "PUT",
+    //     body: file,
+    //     headers: {
+    //       "Content-Type": file.type,
+    //     },
+    //   });
+    // }
 
-    const { success, failure } = await updateProfileCard(formData);
-    if (failure) {
-      setError(failure);
-    } else {
-      console.log("success...");
-      setSuccess(success);
-    }
+    // const { success, failure } = await updateProfileCard(formData);
+    // if (failure) {
+    //   setError(failure);
+    // } else {
+    //   console.log("success...");
+    //   setSuccess(success);
+    // }
   };
 
   const handleRemoveFile = () => {
-    setFile(null);
+    setFiles([]);
     URL.revokeObjectURL(previewImageUrl);
     setPreviewImageUrl("");
     if (fileInputRef.current) {
@@ -174,14 +191,25 @@ export default function EditableProfessorCard({
 
               <div className="flex flex-col gap-y-2">
                 <div className="flex flex-row items-center gap-x-2">
-                  <Button
-                    type="button"
-                    onClick={() => fileInputRef?.current?.click()}
-                    variant="outline"
-                  >
-                    Upload Image
-                  </Button>
-                  {file && (
+                  {files.length === 0 ? (
+                    <Button
+                      type="button"
+                      onClick={() => fileInputRef?.current?.click()}
+                      variant="outline"
+                    >
+                      Choose Image
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={() => startUpload(files, { userId })}
+                      variant="outline"
+                    >
+                      Upload Image
+                    </Button>
+                  )}
+
+                  {files.length > 0 && (
                     <Button
                       onClick={() => handleRemoveFile()}
                       type="button"
