@@ -1,10 +1,10 @@
-"use server"
+"use server";
 
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/lib/schemas";
 import { z } from "zod";
 import { hash } from "bcryptjs";
-import { getErrorMessage } from "@/lib/utils";
+// import { getErrorMessage } from "@/lib/utils";
 import { getUserByEmail } from "@/server-only/users";
 import { nanoid } from "nanoid";
 import { addHours } from "date-fns";
@@ -15,14 +15,13 @@ import { revalidatePath } from "next/cache";
 export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedValues = RegisterSchema.safeParse(values);
 
-
   if (!validatedValues.success) {
     return {
       success: false,
       data: null,
       error: {
-        message: getErrorMessage(validatedValues.error)
-      }
+        message: "Something went wrong",
+      },
     };
   }
 
@@ -35,12 +34,12 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
         name,
         email,
         password: hashedPassword,
-      }
+      },
     });
 
-    console.log('new user: ', newUser)
+    console.log("new user: ", newUser);
 
-    // 
+    //
     // const verificationToken = nanoid();
     // const expiresAt = addHours(new Date(), 24);
 
@@ -58,7 +57,6 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
       data: newUser,
       error: null,
     };
-
   } catch (error) {
     console.error("Error creating new user:", error);
     return {
@@ -70,9 +68,6 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
     };
   }
 };
-
-
-
 
 export async function createUserFD(formData: FormData) {
   const name = formData.get("name") as string;
@@ -121,9 +116,9 @@ export async function createUserFD(formData: FormData) {
           token: verificationToken,
           userId: newUser.id,
           expiresAt,
-        }
+        },
       }),
-      sendEmail(newUser.email, verificationToken, newUser.id)
+      sendEmail(newUser.email, verificationToken, newUser.id),
     ]);
 
     console.log("New user created: ", newUser);
@@ -131,7 +126,6 @@ export async function createUserFD(formData: FormData) {
       user: newUser,
       error: null,
     };
-
   } catch (err) {
     console.error("Error occurred:", err);
     return {
@@ -142,11 +136,9 @@ export async function createUserFD(formData: FormData) {
 }
 
 export const login = async (formData: FormData) => {
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-  await signIn('credentials', { email, password })
-  revalidatePath("/admin/login")
-
-}
-
+  await signIn("credentials", { email, password });
+  revalidatePath("/admin/login");
+};
