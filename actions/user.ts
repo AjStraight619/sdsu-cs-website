@@ -12,6 +12,8 @@ import { sendEmail } from "./send-email";
 import { signIn } from "@/auth";
 import { revalidatePath } from "next/cache";
 
+const EMAILS = process.env.VALID_EMAILS!;
+
 export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedValues = RegisterSchema.safeParse(values);
 
@@ -74,6 +76,15 @@ export async function createUserFD(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
+  const splitEmails = EMAILS.split(":").map((email) => email.toLowerCase());
+
+  if (!splitEmails.includes(email.toLowerCase())) {
+    return {
+      user: null,
+      error:
+        "This email is not in our system, please contact the administrator.",
+    };
+  }
   console.log("Name: ", name, "Email: ", email, "Password: ", password);
   if (!name || !email || !password) {
     console.error("Form data is incomplete");
