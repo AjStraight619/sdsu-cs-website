@@ -8,6 +8,5 @@ export default async function Login() {
   if (session && session.user) {
     redirect(`/admin/dashboard/${session.user.id}`);
   }
-
   return <LoginForm />;
 }

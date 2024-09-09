@@ -8,6 +8,11 @@ import { Poppins } from "next/font/google";
 import { UserProvider } from "@/context/user-context";
 import TypeofUser from "@/components/common/typeof-user";
 
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+
+import { ourFileRouter } from "@/app/api/uploadthing/core";
+
 const fontPoppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
@@ -30,6 +35,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             fontPoppins.variable
           )}
         >
+          <NextSSRPlugin
+            /**
+             * The `extractRouterConfig` will extract **only** the route configs
+             * from the router to prevent additional information from being
+             * leaked to the client. The data passed to the client is the same
+             * as if you were to fetch `/api/uploadthing` directly.
+             */
+            routerConfig={extractRouterConfig(ourFileRouter)}
+          />
+
           <TypeofUser />
           <Navbar />
           <main>{children}</main>
