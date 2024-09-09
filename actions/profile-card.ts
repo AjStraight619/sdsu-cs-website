@@ -14,13 +14,15 @@ export async function updateProfileCard(data: FormData) {
   const formData = Object.fromEntries(data);
   const parsedData = ProfileSchema.safeParse(formData);
 
-  if (!parsedData.success) {
-    console.log("Not a successful parse...");
-    return { failure: "Invalid data format" };
-  }
+  // if (!parsedData.success) {
+  //   console.log("Not a successful parse...");
+  //   return { failure: "Invalid data format" };
+  // }
 
-  const fileUrl = getS3FileURL("profile-image", session.user.id);
-  console.log("fileUrl: ", fileUrl);
+  // const fileUrl = getS3FileURL("profile-image", session.user.id);
+  // console.log("fileUrl: ", fileUrl);
+
+  const userId = session?.user?.id;
 
   try {
     await db.user.update({
@@ -29,7 +31,7 @@ export async function updateProfileCard(data: FormData) {
       },
       data: {
         name: formData.name as string,
-        image: fileUrl,
+        // image: fileUrl,
         bio: formData.bio as string,
       },
     });
@@ -43,6 +45,6 @@ export async function updateProfileCard(data: FormData) {
     console.error(err);
     return { failure: "Failed to update profile." };
   } finally {
-    revalidatePath(`/admin/dashboard/[userId]`, "page");
+    revalidatePath(`/admin/dashboard/${userId}`, "page");
   }
 }

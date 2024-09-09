@@ -141,13 +141,13 @@ export default function EditableProfessorCard({
     //   });
     // }
 
-    // const { success, failure } = await updateProfileCard(formData);
-    // if (failure) {
-    //   setError(failure);
-    // } else {
-    //   console.log("success...");
-    //   setSuccess(success);
-    // }
+    const { success, failure } = await updateProfileCard(formData);
+    if (failure) {
+      setError(failure);
+    } else {
+      console.log("success...");
+      setSuccess(success);
+    }
   };
 
   const handleRemoveFile = () => {
