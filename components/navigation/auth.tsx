@@ -13,6 +13,7 @@ type AuthProps = {
 export default function Auth({ session }: AuthProps) {
   const [userType] = useLocalStorage<string | null>("user", null);
   const [isClient, setIsClient] = useState(false);
+
   const userId = session?.user.id;
 
   console.log("Session: ", session);

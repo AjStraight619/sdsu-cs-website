@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
 import { UserProvider } from "@/context/user-context";
 import TypeofUser from "@/components/common/typeof-user";
+import UserTypeProvider from "@/context/user-type-context";
 
 const fontPoppins = Poppins({
   subsets: ["latin"],
@@ -30,10 +31,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             fontPoppins.variable
           )}
         >
-          <TypeofUser />
-          <Navbar />
-          <main>{children}</main>
-          <Toaster />
+          <UserTypeProvider>
+            <TypeofUser />
+            <Navbar />
+            <main>{children}</main>
+            <Toaster />
+          </UserTypeProvider>
         </body>
       </html>
     </>

@@ -10,8 +10,6 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Session } from "next-auth";
-import { useRouter } from "next/navigation";
 
 export default function TypeofUser() {
   const [userType, setUserType] = useLocalStorage<string | null>("user", null);

@@ -1,10 +1,10 @@
-"use server"
+"use server";
 
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/lib/schemas";
 import { z } from "zod";
 import { hash } from "bcryptjs";
-import { getErrorMessage } from "@/lib/utils";
+// import { getErrorMessage } from "@/lib/utils";
 import { getUserByEmail } from "@/server-only/users";
 import { nanoid } from "nanoid";
 import { addHours } from "date-fns";
@@ -12,22 +12,25 @@ import { sendEmail } from "./send-email";
 import { signIn } from "@/auth";
 import { revalidatePath } from "next/cache";
 
+const EMAILS = process.env.VALID_EMAILS!;
+
 export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedValues = RegisterSchema.safeParse(values);
-
 
   if (!validatedValues.success) {
     return {
       success: false,
       data: null,
       error: {
-        message: getErrorMessage(validatedValues.error)
-      }
+        message: "Something went wrong",
+      },
     };
   }
 
   const { name, email, password } = validatedValues.data;
   const hashedPassword = await hash(password, 12);
+
+  // if (!splitEmails) return;
 
   try {
     const newUser = await db.user.create({
@@ -35,12 +38,12 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
         name,
         email,
         password: hashedPassword,
-      }
+      },
     });
 
-    console.log('new user: ', newUser)
+    console.log("new user: ", newUser);
 
-    // 
+    //
     // const verificationToken = nanoid();
     // const expiresAt = addHours(new Date(), 24);
 
@@ -58,7 +61,6 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
       data: newUser,
       error: null,
     };
-
   } catch (error) {
     console.error("Error creating new user:", error);
     return {
@@ -71,13 +73,14 @@ export const createUser = async (values: z.infer<typeof RegisterSchema>) => {
   }
 };
 
-
-
-
 export async function createUserFD(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+
+  const splitEmails = EMAILS.split(":").map((email) => email.toLowerCase());
+
+  console.log("Valid emails: ", splitEmails);
 
   console.log("Name: ", name, "Email: ", email, "Password: ", password);
   if (!name || !email || !password) {
@@ -89,7 +92,6 @@ export async function createUserFD(formData: FormData) {
   }
 
   try {
-    // Run the check for existing user and password hashing in parallel
     const [existingUser, hashedPassword] = await Promise.all([
       getUserByEmail(email),
       hash(password, 12),
@@ -99,6 +101,13 @@ export async function createUserFD(formData: FormData) {
       return {
         user: null,
         error: "User already exists",
+      };
+    }
+
+    if (!splitEmails.includes(email.toLowerCase())) {
+      return {
+        user: null,
+        error: "Not a valid email",
       };
     }
 
@@ -121,9 +130,9 @@ export async function createUserFD(formData: FormData) {
           token: verificationToken,
           userId: newUser.id,
           expiresAt,
-        }
+        },
       }),
-      sendEmail(newUser.email, verificationToken, newUser.id)
+      sendEmail(newUser.email, verificationToken, newUser.id),
     ]);
 
     console.log("New user created: ", newUser);
@@ -131,7 +140,6 @@ export async function createUserFD(formData: FormData) {
       user: newUser,
       error: null,
     };
-
   } catch (err) {
     console.error("Error occurred:", err);
     return {
@@ -142,11 +150,9 @@ export async function createUserFD(formData: FormData) {
 }
 
 export const login = async (formData: FormData) => {
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-  await signIn('credentials', { email, password })
-  revalidatePath("/admin/login")
-
-}
-
+  await signIn("credentials", { email, password });
+  revalidatePath("/admin/login");
+};

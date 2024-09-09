@@ -14,32 +14,34 @@ export default async function HomePage() {
   const session = await auth();
 
   return (
-    <div className="min-h-screen items-center justify-center flex flex-col">
-      <h1 className="capitalize font-poppins text-3xl pt-12">
-        CS Course Repository
-      </h1>
+    <div className="flex min-h-screen flex-col items-center justify-center sm:p-24 p-3">
+      <div className="w-full max-w-screen-lg">
+        <h1 className="capitalize font-poppins text-3xl pt-12 text-center">
+          CS Course Repository
+        </h1>
 
-      <section className="welcome-section">
-        <h2 className="capitalize font-poppins text-center">
-          Welcome Students!
-        </h2>
-        <p className="text-center px-20 py-1">
-          This is the SDSU Computer Science Repository! It is designed to
-          provide you with all the resources and information you need for your
-          Computer Science courses at SDSU.
-        </p>
-        <p className="text-center px-20 py-1">
-          Explore the classes below to access syllabi, lecture notes,
-          assignments, and more. Happy learning!
-        </p>
-      </section>
+        <section className="welcome-section">
+          <h2 className="capitalize font-poppins text-center">
+            Welcome Students!
+          </h2>
+          <p className="text-center px-20 py-1">
+            This is the SDSU Computer Science Repository! It is designed to
+            provide you with all the resources and information you need for your
+            Computer Science courses at SDSU.
+          </p>
+          <p className="text-center px-20 py-1">
+            Explore the classes below to access syllabi, lecture notes,
+            assignments, and more. Happy learning!
+          </p>
+        </section>
 
-      {/* <Card className="px-10 py-10">
+        {/* <Card className="px-10 py-10">
         <CardContent>
           <ClassList professors={professors} />
         </CardContent>
       </Card> */}
-      <Professors />
+        <Professors />
+      </div>
     </div>
   );
 }
