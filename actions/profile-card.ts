@@ -1,15 +1,18 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { ProfileSchema } from "@/lib/schemas";
-import { getS3FileURL } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
+import { auth } from '@/auth';
+import { db } from '@/lib/db';
+import { ProfileSchema } from '@/lib/schemas';
+import { getError, getS3FileURL } from '@/lib/utils';
+import { revalidatePath } from 'next/cache';
+
+// ! TODO: Fix this to use zod form validator
 
 export async function updateProfileCard(data: FormData) {
   const session = await auth();
+
   if (!session || !session.user) {
-    return { failure: "Not authenticated" };
+    return { failure: 'Not authenticated' };
   }
   const formData = Object.fromEntries(data);
   const parsedData = ProfileSchema.safeParse(formData);
@@ -30,21 +33,22 @@ export async function updateProfileCard(data: FormData) {
         id: session.user.id,
       },
       data: {
-        name: formData.name as string,
+        firstName: formData.firstName as string,
         // image: fileUrl,
+        lastName: formData.lastName as string,
         bio: formData.bio as string,
       },
     });
 
-    console.log("updated profile");
+    console.log('updated profile');
 
     return {
-      success: "Successfully updated profile.",
+      success: 'Successfully updated profile.',
     };
   } catch (err) {
-    console.error(err);
-    return { failure: "Failed to update profile." };
+    getError(err);
+    return { failure: 'Failed to update profile.' };
   } finally {
-    revalidatePath(`/admin/dashboard/${userId}`, "page");
+    revalidatePath(`/admin/dashboard/${userId}`);
   }
 }

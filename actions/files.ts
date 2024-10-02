@@ -1,32 +1,53 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
+import { getError } from '@/lib/utils';
+import { User } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export async function fileImageUpload(userId: string, fileUrl: string) {
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+  let user: User | null;
 
-  if (!user) {
-    console.log("User not found ");
+  try {
+    user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+  } catch (e) {
+    if (e instanceof TypeError) {
+      console.log(e);
+    } else if (typeof e === 'string') {
+      console.log('');
+    } else {
+      throw e;
+    }
+    return;
   }
 
-  await db.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      image: fileUrl,
-    },
-  });
+  if (!user) {
+    console.log('User not found ');
+  }
+
+  try {
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        image: fileUrl,
+      },
+    });
+  } catch (e) {
+    getError(e);
+    return;
+  }
 }
 
 export async function fileSyllabusUpload(
   userId: string,
   courseName: string,
-  fileUrl: string
+  fileUrl: string,
 ) {
   const user = await db.user.findUnique({
     where: {
@@ -34,12 +55,8 @@ export async function fileSyllabusUpload(
     },
   });
 
-  console.log("userId: ", userId);
-  console.log("Course name: ", courseName);
-  console.log("File url: ", fileUrl);
-
   if (!user) {
-    console.log("User not found");
+    console.log('User not found');
     return;
   }
 
@@ -53,7 +70,7 @@ export async function fileSyllabusUpload(
   });
 
   if (!course) {
-    console.log("No course");
+    console.log('No course');
     return;
   }
 
@@ -70,8 +87,10 @@ export async function fileSyllabusUpload(
         url: fileUrl,
       },
     });
-    console.log("Syllabus updated or created successfully");
+    console.log('Syllabus updated or created successfully');
   } catch (e) {
-    console.error("Error during syllabus upsert:", e);
+    getError(e);
+  } finally {
+    revalidatePath(`admin/dashboard/${userId}`);
   }
 }

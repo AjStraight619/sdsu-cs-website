@@ -1,12 +1,12 @@
-"use client";
-import { signIn } from "@/auth";
+'use client';
+import { signIn } from '@/auth';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,30 +14,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import SubmitButton2 from "@/components/ui/submit-button2";
-import { LoginSchema } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { login } from "@/actions/user";
-import { SignOut } from "@/components/ui/sign-out-button";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import SubmitButton2 from '@/components/ui/submit-button2';
+import { LoginSchema } from '@/lib/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { login } from '@/actions/user';
+import { SignOut } from '@/components/ui/sign-out-button';
 
 export default function LoginForm() {
-  const [error, setError] = useState("");
-  const [success, setSucces] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSucces] = useState('');
   const form = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   return (
-    <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
+    <Card className="mx-auto w-full sm:max-w-lg">
       <CardHeader>
         <CardTitle>Log in</CardTitle>
         <CardDescription>Log in to see your dashboard</CardDescription>

@@ -1,19 +1,18 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
+'use client';
+import { useEffect, useRef, useState } from 'react';
 
-import { Textarea } from "../ui/textarea";
+import { Textarea } from '../ui/textarea';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogTrigger,
-} from "../ui/dialog";
-import { usePathname } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileSchema } from "@/lib/schemas";
-import { updateProfileCard } from "@/actions/profile-card";
-import { getSignedURL } from "@/actions/s3";
+} from '../ui/dialog';
+import { usePathname } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProfileSchema } from '@/lib/schemas';
+import { updateProfileCard } from '@/actions/profile-card';
 import {
   Form,
   FormControl,
@@ -21,20 +20,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import ProfileImage from "../common/profile-image";
-import { Button } from "../ui/button";
-import SubmitButton2 from "../ui/submit-button2";
-import { z } from "zod";
-import { Input } from "../ui/input";
+} from '../ui/form';
+import ProfileImage from '../common/profile-image';
+import { Button } from '../ui/button';
+import SubmitButton2 from '../ui/submit-button2';
+import { z } from 'zod';
+import { Input } from '../ui/input';
 
-import { PencilIcon } from "lucide-react";
-import { ErrorMessage, SuccessMessage } from "../ui/form-messages";
-import { useUploadThing } from "@/lib/uploadthing";
+import { PencilIcon } from 'lucide-react';
+import { ErrorMessage, SuccessMessage } from '../ui/form-messages';
+import { useUploadThing } from '@/lib/uploadthing';
+import { toast } from 'sonner';
+import { Progress } from '../ui/progress';
 
 type EditableProfessorCardProps = {
   imageUrl: string;
-  name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   bio: string | null;
   courses?: string[];
   isEditable: boolean;
@@ -43,7 +45,8 @@ type EditableProfessorCardProps = {
 
 export default function EditableProfessorCard({
   imageUrl,
-  name,
+  firstName,
+  lastName,
   bio,
   courses,
   userId,
@@ -51,119 +54,99 @@ export default function EditableProfessorCard({
   const [isEditing, setIsEditing] = useState(false);
   const pathname = usePathname();
   const [success, setSuccess] = useState<string | undefined>(undefined);
-  const [error, setError] = useState("");
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const [error, setError] = useState('');
+  const [previewImageUrl, setPreviewImageUrl] = useState('');
   // const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const renderRef = useRef(0);
 
-  const { startUpload } = useUploadThing("imageUploader", {
+  const [progess, setProgress] = useState<number>(0);
+
+  const { startUpload, isUploading } = useUploadThing('imageUploader', {
     onClientUploadComplete: () => {
-      alert("uploaded successfully!");
+      setFiles([]);
+      toast.dismiss();
+      setProgress(0);
     },
     onUploadError: () => {
-      alert("error occurred while uploading");
+      alert('error occurred while uploading');
     },
     onUploadBegin: () => {
-      alert("upload has begun");
+      // alert('upload has begun');
+      toast.loading('Uploading image');
+    },
+    onUploadProgress: p => {
+      // toast.loading('Uploading image');
+      setProgress(p);
     },
   });
   useEffect(() => {
-    console.log("This component re rendered: ", renderRef.current++);
+    console.log('This component re rendered: ', renderRef.current++);
   });
 
   const form = useForm<z.output<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      name: name ?? "",
-      bio: bio ?? "",
+      firstName: firstName ?? '',
+      lastName: lastName ?? '',
+      bio: bio ?? '',
     },
   });
 
-  // useEffect(() => {
-  //   return () => {
-  //     console.log("revoking url")
-  //     URL.revokeObjectURL(previewImageUrl)
-  //   }
-  // }, [])
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("files: ", e.target?.files);
+    console.log('files: ', e.target?.files);
     if (e.target.files) {
       const file = e.target.files[0];
-      // setFile(file);
       const tempUrl = URL.createObjectURL(file);
       setPreviewImageUrl(tempUrl);
-      console.log("file input ref: ", fileInputRef.current);
-      setFiles((prevFiles) => [...prevFiles, file]);
+      console.log('file input ref: ', fileInputRef.current);
+      setFiles(prevFiles => [...prevFiles, file]);
     }
   };
 
-  const computeSHA256 = async (file: File) => {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((b) => b.toString().padStart(2, "0"))
-      .join("");
-    return hashHex;
-  };
+  // const computeSHA256 = async (file: File) => {
+  //   const buffer = await file.arrayBuffer();
+  //   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  //   const hashArray = Array.from(new Uint8Array(hashBuffer));
+  //   const hashHex = hashArray.map(b => b.toString().padStart(2, '0')).join('');
+  //   return hashHex;
+  // };
 
   const action = async (formData: FormData) => {
-    setSuccess("");
-    setError("");
-
-    // if (file) {
-    //   console.log("file: ", file);
-    //   const checksum = await computeSHA256(file);
-    //   const signedUrlResult = await getSignedURL(
-    //     // file.type,
-    //     file.size,
-    //     // checksum,
-    //     "profile-image"
-    //   );
-    //   if (signedUrlResult?.failure !== undefined) {
-    //     setError("Failed to retrieve signed url");
-    //     return;
-    //   }
-    //   const url = signedUrlResult?.success.url;
-    //   if (!url) {
-    //     setError("Something went wrong");
-    //     return;
-    //   }
-    //   await fetch(url, {
-    //     method: "PUT",
-    //     body: file,
-    //     headers: {
-    //       "Content-Type": file.type,
-    //     },
-    //   });
-    // }
-
+    if (files[0]) {
+      await startUpload(files);
+    }
     const { success, failure } = await updateProfileCard(formData);
     if (failure) {
-      setError(failure);
+      // setError(failure);
+      toast.error('Failed to update profile');
     } else {
-      console.log("success...");
-      setSuccess(success);
+      // setSuccess(success);
+      toast.success('Profile updated successfully');
     }
   };
 
   const handleRemoveFile = () => {
     setFiles([]);
     URL.revokeObjectURL(previewImageUrl);
-    setPreviewImageUrl("");
+    setPreviewImageUrl('');
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
     }
-    console.log("removing file, file input ref: ", fileInputRef.current);
+    console.log('removing file, file input ref: ', fileInputRef.current);
   };
 
-  if (!pathname.includes("/admin")) return null;
+  const handleOpenChange = (open: boolean) => {
+    setIsEditing(open);
+    setSuccess('');
+    setError('');
+  };
+
+  if (!pathname.includes('/admin')) return null;
 
   return (
-    <Dialog open={isEditing} onOpenChange={setIsEditing}>
+    <Dialog open={isEditing} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           onClick={() => setIsEditing(true)}
@@ -181,17 +164,19 @@ export default function EditableProfessorCard({
               <ProfileImage
                 imageUrl={previewImageUrl ? previewImageUrl : imageUrl}
               />
+
               <input
                 onChange={handleFileChange}
                 ref={fileInputRef}
                 hidden
+                multiple={false}
                 type="file"
                 accept=".jpg, .jpeg, .png"
               />
 
               <div className="flex flex-col gap-y-2">
                 <div className="flex flex-row items-center gap-x-2">
-                  {files.length === 0 ? (
+                  {files.length === 0 && (
                     <Button
                       type="button"
                       onClick={() => fileInputRef?.current?.click()}
@@ -199,16 +184,7 @@ export default function EditableProfessorCard({
                     >
                       Choose Image
                     </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      onClick={() => startUpload(files, { userId })}
-                      variant="outline"
-                    >
-                      Upload Image
-                    </Button>
                   )}
-
                   {files.length > 0 && (
                     <Button
                       onClick={() => handleRemoveFile()}
@@ -223,13 +199,27 @@ export default function EditableProfessorCard({
                 {error && <ErrorMessage message={error} />}
               </div>
             </div>
-
+            <Progress value={progess} />
             <FormField
-              name="name"
+              name="firstName"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="lastName"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -253,7 +243,7 @@ export default function EditableProfessorCard({
             />
 
             <DialogFooter>
-              <SubmitButton2>Submit</SubmitButton2>
+              <SubmitButton2 isUploading={isUploading}>Submit</SubmitButton2>
             </DialogFooter>
           </form>
         </Form>

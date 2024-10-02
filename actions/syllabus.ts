@@ -1,21 +1,23 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { getS3FileURL } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
+import { auth } from '@/auth';
+import { db } from '@/lib/db';
+import { getError, getS3FileURL } from '@/lib/utils';
+import { revalidatePath } from 'next/cache';
 
 export async function addSyllabus(data: FormData) {
   const session = await auth();
   if (!session || !session.user.id) {
-    return { failure: "Not authenticated" };
+    return { failure: 'Not authenticated' };
   }
+
+  const userId = session.user.id;
 
   const formData = Object.fromEntries(data.entries());
   const title = (formData.title as string) || null;
   const description = (formData.description as string) || null;
   const courseTitle = formData.courseTitle as string;
-  console.log("course title: ", courseTitle);
+  console.log('course title: ', courseTitle);
 
   const professorId = session.user.id;
 
@@ -28,11 +30,11 @@ export async function addSyllabus(data: FormData) {
     });
 
     if (!course) {
-      return { failure: "Course not found" };
+      return { failure: 'Course not found' };
     }
 
     const courseId = course.id;
-    const fileUrl = getS3FileURL("syllabus", session.user.id);
+    const fileUrl = getS3FileURL('syllabus', session.user.id);
 
     const existingSyllabus = await db.syllabus.findUnique({
       where: {
@@ -47,8 +49,8 @@ export async function addSyllabus(data: FormData) {
           id: existingSyllabus.id,
         },
         data: {
-          title: title ?? "",
-          description: description ?? "",
+          title: title ?? '',
+          description: description ?? '',
           url: fileUrl,
         },
       });
@@ -56,22 +58,22 @@ export async function addSyllabus(data: FormData) {
       result = await db.syllabus.create({
         data: {
           courseId: courseId,
-          title: title ?? "",
-          description: description ?? "",
+          title: title ?? '',
+          description: description ?? '',
           url: fileUrl,
         },
       });
     }
 
-    console.log("result: ", result);
+    console.log('result: ', result);
 
     return {
-      success: "Upload successful!",
+      success: 'Upload successful!',
     };
-  } catch (error) {
-    console.error("Error adding syllabus:", error);
-    return { failure: "Error adding syllabus" };
+  } catch (err) {
+    getError(err);
+    return { failure: 'Error adding syllabus' };
   } finally {
-    revalidatePath(`/admin/dashboard/[userId]`, "page");
+    revalidatePath(`/admin/dashboard/${userId}`);
   }
 }

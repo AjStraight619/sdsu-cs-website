@@ -1,48 +1,34 @@
-import { fileImageUpload, fileSyllabusUpload } from "@/actions/files";
-import { getSession } from "next-auth/react";
-import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
-import { z } from "zod";
+import { fileImageUpload, fileSyllabusUpload } from '@/actions/files';
+import { auth } from '@/auth';
+import { createUploadthing, type FileRouter } from 'uploadthing/next';
+import { UploadThingError } from 'uploadthing/server';
+import { z } from 'zod';
 
 const f = createUploadthing();
-
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({ image: { maxFileSize: "4MB" } })
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
+  imageUploader: f({ image: { maxFileSize: '4MB' } })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req, input }) => {
+    .middleware(async ({ req }) => {
       // This code runs on your server before upload
-      console.log("Req: ", req);
+      console.log('Req: ', req);
 
-      //   const session = await getSession();
+      const session = await auth();
 
-      //   //   if (!session) throw new UploadThingError("Unauthorized");
+      if (!session) throw new UploadThingError('Unauthorized');
 
-      //   const user = session?.user;
-
-      const userId = input.userId;
-
-      //   // If you throw, the user will not be able to upload
-      //   if (!user) throw new UploadThingError("Unauthorized");
-
-      //   console.log("User id: ", user.id);
+      const userId = session.user.id;
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      console.log('Upload complete for userId:', metadata.userId);
 
-      console.log("file url", file.url);
+      console.log('file url', file.url);
 
       await fileImageUpload(metadata.userId, file.url);
 
@@ -50,42 +36,36 @@ export const ourFileRouter = {
       return { uploadedBy: metadata.userId };
     }),
 
-  syllabusUploader: f(["application/pdf"])
+  syllabusUploader: f(['application/pdf'])
     .input(
       z.object({
-        userId: z.string(),
         course: z.string(),
-      })
+      }),
     )
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req, input }) => {
       // This code runs on your server before upload
-      console.log("Req: ", req);
+      console.log('Req: ', req);
 
-      //   const session = await getSession();
+      const session = await auth();
 
-      //   //   if (!session) throw new UploadThingError("Unauthorized");
+      if (!session) throw new UploadThingError('Unauthorized');
 
       //   const user = session?.user;
 
-      const userId = input.userId;
+      const userId = session.user.id;
       const course = input.course;
-
-      //   // If you throw, the user will not be able to upload
-      //   if (!user) throw new UploadThingError("Unauthorized");
-
-      //   console.log("User id: ", user.id);
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId, course };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      console.log('Upload complete for userId:', metadata.userId);
 
       const { userId, course } = metadata;
 
-      console.log("file url", file.url);
+      console.log('file url', file.url);
 
       await fileSyllabusUpload(userId, course, file.url);
 

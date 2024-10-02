@@ -1,5 +1,5 @@
-import { Module } from "@prisma/client";
-import ContentManagement from "./content-management";
+import { Module } from '@prisma/client';
+import ContentManagement from './content-management';
 
 type ModuleContentProps = {
   modules: Module[] | undefined;
@@ -8,10 +8,11 @@ type ModuleContentProps = {
 export default function ModuleContent({ modules }: ModuleContentProps) {
   const handleModuleUpload = async (formData: FormData) => {};
 
-  const contentUrls = modules?.map((m) => m.url) || [];
+  const contentUrls = modules?.map(m => m.url) || [];
 
   return (
     <ContentManagement
+      // userId=""
       title="Modules"
       description=""
       contentUrls={contentUrls}

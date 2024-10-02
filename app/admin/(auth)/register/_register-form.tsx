@@ -1,12 +1,12 @@
-"use client";
-import { createUserFD } from "@/actions/user";
+'use client';
+import { createUserFD } from '@/actions/user';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -15,45 +15,46 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { ErrorMessage, SuccessMessage } from "@/components/ui/form-messages";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { ErrorMessage, SuccessMessage } from '@/components/ui/form-messages';
+import { Input } from '@/components/ui/input';
 
-import { RegisterSchema } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterSchema } from '@/lib/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import SubmitButton2 from "@/components/ui/submit-button2";
+import SubmitButton2 from '@/components/ui/submit-button2';
 
 export default function RegisterForm() {
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const form = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: "",
-      name: "",
-      password: "",
-      confirmPassword: "",
+      email: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const createUser = async (formData: FormData) => {
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
     if (!validatePassword(password, confirmPassword)) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
-    const data = await createUserFD(formData);
-    console.log("Response data: ", data);
+    const data = await createUserFD(form.getValues());
+    console.log('Response data: ', data);
     if (data.error) {
       setError(data.error);
       return;
     } else if (data.user) {
-      setSuccess("Email verification sent!");
+      setSuccess('Email verification sent!');
     }
   };
 
@@ -63,7 +64,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
+    <Card className="mx-auto w-full sm:max-w-lg">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>
@@ -96,17 +97,34 @@ export default function RegisterForm() {
               )}
             />
             <FormField
-              name="name"
+              name="firstName"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Name..." {...field} />
+                    <Input type="text" placeholder="First name..." {...field} />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     This will be the display name on your card.
-                  </FormDescription>
+                  </FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="lastName"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Last name..." {...field} />
+                  </FormControl>
+                  {/* <FormDescription>
+                    This will be the display name on your card.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -121,7 +139,7 @@ export default function RegisterForm() {
                   <FormControl>
                     <Input type="password" placeholder="*********" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
