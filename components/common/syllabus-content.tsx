@@ -1,6 +1,6 @@
-import { Syllabus } from "@prisma/client";
-import ContentManagement from "./content-management";
-import { addSyllabus } from "@/actions/syllabus";
+import { Syllabus } from '@prisma/client';
+import ContentManagement from './content-management';
+import { addSyllabus } from '@/actions/syllabus';
 
 export default function SyllabusContent({
   syllabus,
@@ -21,7 +21,7 @@ export default function SyllabusContent({
       contentUrls={contentUrls}
       action={handleSyllabusSubmit}
       acceptedFileTypes="application/pdf"
-      userId={userId}
+      // userId={userId}
     />
   );
 }
