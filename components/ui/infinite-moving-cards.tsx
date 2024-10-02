@@ -4,6 +4,7 @@ import { cn, getProfessorInitials } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
+import Link from 'next/link';
 
 export const InfiniteMovingCards = ({
   items,
@@ -117,26 +118,27 @@ export const InfiniteMovingCards = ({
                 </span>
               </div>
             </blockquote> */}
-
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  <Avatar>
-                    <AvatarImage src={item.image ?? ''} />
-                    <AvatarFallback>
-                      {getInitials(item.firstName, item.lastName)}
-                    </AvatarFallback>
-                  </Avatar>
-                  {item.firstName + ' ' + item.lastName}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </CardContent>
-            </Card>
+            <Link href={`/professor/${item.id}`}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    <Avatar>
+                      <AvatarImage src={item.image ?? ''} />
+                      <AvatarFallback>
+                        {getInitials(item.firstName, item.lastName)}
+                      </AvatarFallback>
+                    </Avatar>
+                    {item.firstName + ' ' + item.lastName}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </CardContent>
+              </Card>
+            </Link>
           </li>
         ))}
       </ul>

@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 type ProfessorPageProps = {
   params: {
@@ -20,9 +20,11 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
 
   return (
     <div className="mt-24 flex items-center justify-center">
-      {professor?.courses.map((c) => (
+      {/* {professor?.firstName}
+      {professor?.courses.map(c => (
         <div key={c.id}>{c.title}</div>
-      ))}
+      ))} */}
+      <pre>{JSON.stringify(professor, null, 2)}</pre>
     </div>
   );
 }
