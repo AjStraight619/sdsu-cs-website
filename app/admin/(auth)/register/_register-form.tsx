@@ -26,6 +26,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import SubmitButton2 from '@/components/ui/submit-button2';
+import Link from 'next/link';
 
 export default function RegisterForm() {
   const [error, setError] = useState('');
@@ -161,6 +162,15 @@ export default function RegisterForm() {
           </form>
         </Form>
       </CardContent>
+      <div className="mx-auto pb-2 w-full text-center">
+        Have have an account?{' '}
+        <Link
+          className="text-red-500 hover:underline transition-transform duration-100"
+          href="/admin/login"
+        >
+          Sign in
+        </Link>
+      </div>
     </Card>
   );
 }

@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { login } from '@/actions/user';
 import { SignOut } from '@/components/ui/sign-out-button';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [error, setError] = useState('');
@@ -85,6 +86,15 @@ export default function LoginForm() {
               <SubmitButton2 className="w-full">Log In</SubmitButton2>
             </form>
           </Form>
+        </div>
+        <div className="mx-auto py-2 w-full text-center">
+          Don't have an account?{' '}
+          <Link
+            className="text-red-500 hover:underline transition-transform duration-100"
+            href="/admin/register"
+          >
+            Sign up
+          </Link>
         </div>
       </CardContent>
     </Card>
